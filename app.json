@@ -1,0 +1,29 @@
+{
+  "expo": {
+    "name": "AniView",
+    "slug": "AniView",
+    "privacy": "public",
+    "sdkVersion": "35.0.0",
+    "platforms": [
+      "ios",
+      "android"
+    ],
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./src/assets/images/gray_logo.png",
+    "splash": {
+      "image": "./src/assets/images/splash.jpg",
+      "resizeMode": "contain",
+      "backgroundColor": "#1D1D1D"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    }
+  }
+}
