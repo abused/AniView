@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, ImageBackground, Image, View, TouchableOpacity} from 'react-native';
 import {Text} from 'react-native-elements';
-const References = require('./Data');
+const Info = require('./Info');
 const Actions = require('./Actions');
 
 export default class Welcome extends React.Component {
@@ -18,11 +18,11 @@ export default class Welcome extends React.Component {
 
                     <View style={{flex: 1, justifyContent: 'flex-end'}}>
                         <View style={{flexDirection: 'row'}}>
-                            <TouchableOpacity style={[styles.button, {backgroundColor: '#05b7ed', borderRightColor: 'black', borderRightWidth: 4}]} onPress={() => {Actions.signIn()}}>
+                            <TouchableOpacity style={[styles.button, {backgroundColor: '#05b7ed', borderRightColor: 'black', borderRightWidth: 4}]} onPress={() => this.props.updateWelcome(true, true)}>
                                 <Text style={styles.buttonText}>AniList Sign In</Text>
                             </TouchableOpacity>
 
-                            <TouchableOpacity style={[styles.button, {backgroundColor: '#FF5757'}]} onPress={() => {Actions.skipSignIn()}}>
+                            <TouchableOpacity style={[styles.button, {backgroundColor: '#FF5757'}]} onPress={() => this.props.updateWelcome(false, false)}>
                                 <Text style={styles.buttonText}>Skip Sign In</Text>
                             </TouchableOpacity>
                         </View>
@@ -36,13 +36,13 @@ export default class Welcome extends React.Component {
 const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
-        width: References.WINDOW_WIDTH,
-        height: References.WINDOW_HEIGHT
+        width: Info.WINDOW_WIDTH,
+        height: Info.WINDOW_HEIGHT
     },
     background: {
         flex: 1,
-        width: References.WINDOW_WIDTH,
-        height: References.WINDOW_HEIGHT
+        width: Info.WINDOW_WIDTH,
+        height: Info.WINDOW_HEIGHT
     },
     logo: {
         width: '50%',
@@ -68,8 +68,8 @@ const styles = StyleSheet.create({
         fontSize: 20
     },
     button: {
-        width: References.WINDOW_WIDTH / 2,
-        height: 0.12 * References.WINDOW_HEIGHT,
+        width: Info.WINDOW_WIDTH / 2,
+        height: 0.12 * Info.WINDOW_HEIGHT,
         justifyContent: 'center',
         alignItems: 'center'
     }

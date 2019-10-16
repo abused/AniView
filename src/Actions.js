@@ -1,32 +1,22 @@
-import {AsyncStorage} from "react-native";
-let Data = require('./Data');
-
-function signIn() {
-    console.log("Signed in!");
-}
-
-function skipSignIn() {
-    console.log("Skipping sign in!");
-}
+import * as SecureStore from 'expo-secure-store';
 
 async function storeData(key, value) {
     try {
-        await AsyncStorage.setItem(key, value);
+        if(SecureStore.getItemAsync(key) !== null) {
+            await SecureStore.deleteItemAsync(key).then(fulfilledVal => SecureStore.setItemAsync(key, value));
+        }else {
+            await SecureStore.setItemAsync(key, value);
+        }
     }catch (e) {
         console.log(e);
     }
 }
 
 async function retrieveData(key) {
-    return await AsyncStorage.getItem(key);
-}
-
-async function loadData() {
-    //let firstLoad = retrieveData()
-    //Data.setFirstLoad()
+    return await SecureStore.getItemAsync(key);
 }
 
 module.exports = {
-  signIn: signIn,
-  skipSignIn: skipSignIn
+    storeData: storeData,
+    retrieveData: retrieveData
 };
