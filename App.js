@@ -1,55 +1,73 @@
 import React from 'react';
-import {View, Text, Button} from "react-native";
+import {createAppContainer, createSwitchNavigator} from 'react-navigation';
+import {createStackNavigator} from 'react-navigation-stack';
+import {ImageBackground} from "react-native";
 import Welcome from './src/Welcome';
-const Actions = require('./src/Actions');
+const Utils = require('./src/utils/Utils');
+const Info = require('./src/utils/Info');
+const ThemeParser = require('./src/utils/ThemeParser');
 
-export default class App extends React.Component {
+const MainStack = createStackNavigator(
+    {
+        AppHome: {screen: Welcome.LoginScreen}
+    },
+    {
+        initialRouteName: 'AppHome'
+    }
+);
+
+const WelcomeStack = createStackNavigator(
+    {
+        AppWelcome: {screen: Welcome.WelcomeScreen},
+        Login: {screen: Welcome.LoginScreen}
+    },
+    {
+        initialRouteName: 'AppWelcome'
+    }
+);
+
+class LoadingScreen extends React.Component {
+
+    static navigationOptions = {
+        header: null
+    };
 
     constructor(props) {
         super(props);
-        let showWelcomeData;
-        Actions.retrieveData('showWelcome').then(value => showWelcomeData = value);
-
-        this.state = {
-            showWelcome: showWelcomeData ? showWelcomeData === 'false' : true,
-            loginScreen: false
-        };
-
-        this.updateWelcome = this.updateWelcome.bind(this);
+        this._loadAsync();
     }
 
-    updateWelcome(show, login) {
-        if(!login) {
-            Actions.storeData('showWelcome', show.toString());
-            this.setState({showWelcome: show, loginScreen: login});
-        }else {
-            this.setState({loginScreen: login});
-        }
-
-        console.log(this.state.showWelcome);
-        console.log(Actions.retrieveData('showWelcome'));
-        console.log(this.state.loginScreen);
-    }
+    _loadAsync = async () => {
+        Utils.retrieveData('theme').then(value => {
+           if(value !== null) {
+               ThemeParser.parseTheme(value);
+           }else {
+               ThemeParser.loadDefaultTheme();
+           }
+        });
+        Utils.retrieveData('showWelcome').then(value => {
+            if(value === 'false') {
+                this.props.navigation.navigate('Main');
+            }else {
+                this.props.navigation.navigate('Welcome');
+            }
+        });
+    };
 
     render() {
-        if(this.state.showWelcome || this.state.loginScreen) {
-            return (
-                <View>
-                    <Welcome updateWelcome={this.updateWelcome}/>
-                </View>
-            );
-        }else {
-            return (
-                <View>
-                    <Text>Hello World!</Text>
-                    <Text>Hello World!</Text>
-                    <Text>Hello World!</Text>
-                    <Text>Hello World!</Text>
-                    <Text>Hello World!</Text>
-                    <Text>Hello World!</Text>
-                    <Button title='Reset Everything!' onPress={() => this.updateWelcome(true, false)} />
-                </View>
-            );
-        }
+        return(
+            <ImageBackground source={Info.SPLASH} style={{flex: 1, width: Info.WINDOW_WIDTH, height: Info.WINDOW_HEIGHT}} />
+        );
     }
 }
+
+export default createAppContainer(createSwitchNavigator(
+    {
+        Loading: LoadingScreen,
+        Main: MainStack,
+        Welcome: WelcomeStack
+    },
+    {
+        initialRouteName: 'Loading'
+    }
+));
