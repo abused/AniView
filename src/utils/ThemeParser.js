@@ -1,5 +1,6 @@
 const themes = {
-    DEFAULT: require('./../assets/themes/default.json')
+    DEFAULT: require('./../assets/themes/default.json'),
+    TEST: require('./../assets/themes/test.json')
 };
 
 let theme = {};
@@ -24,11 +25,12 @@ function parseTheme(json) {
     theme.navActiveTextColor = json.navActiveTextColor;
     theme.loginTopBorderColor = json.loginTopBorderColor;
     theme.buttonRightBorderColor = json.buttonRightBorderColor;
+    module.exports.theme = theme;
 }
 
 module.exports = {
     themes: themes,
-    theme: theme,
+    theme: themes.DEFAULT,
     loadDefaultTheme: loadDefaultTheme,
     parseTheme: parseTheme
 };
