@@ -1,15 +1,12 @@
+//TODO PARSE THEMES FROM GITHUB REPO SO THAT THEY CAN BE EDITED EASILY!
 const themes = {
-    DEFAULT: require('./../assets/themes/default.json'),
-    TEST: require('./../assets/themes/test.json')
+    'DEFAULT': require('./../assets/themes/default.json'),
+    'TEST': require('./../assets/themes/test.json')
 };
 
-let theme = {};
-
-function loadDefaultTheme() {
-    parseTheme(themes.DEFAULT);
-}
-
 function parseTheme(json) {
+    let theme = {};
+
     theme.name = json.name;
     theme.backgroundColor = json.backgroundColor;
     theme.navBackgroundColor = json.navBackgroundColor;
@@ -25,12 +22,16 @@ function parseTheme(json) {
     theme.navActiveTextColor = json.navActiveTextColor;
     theme.loginTopBorderColor = json.loginTopBorderColor;
     theme.buttonRightBorderColor = json.buttonRightBorderColor;
-    module.exports.theme = theme;
+
+    return theme;
 }
 
 module.exports = {
     themes: themes,
-    theme: themes.DEFAULT,
-    loadDefaultTheme: loadDefaultTheme,
-    parseTheme: parseTheme
+    themeData: {
+        theme: parseTheme(themes['DEFAULT']),
+        loadTheme: function(json) {
+            this.theme = parseTheme(json);
+        }
+    }
 };

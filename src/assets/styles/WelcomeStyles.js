@@ -14,7 +14,7 @@ const welcomeStyles = StyleSheet.create({
         alignSelf: 'center'
     },
     text: {
-        color: ThemeParser.theme.textColor,
+        color: ThemeParser.themeData.theme.textColor,
         alignSelf: 'center',
         fontFamily: 'Arial',
     },
@@ -44,8 +44,8 @@ const loginStyles = StyleSheet.create({
     loginView: {
         width: Info.WINDOW_WIDTH,
         height: Info.WINDOW_HEIGHT * 0.6,
-        backgroundColor: ThemeParser.theme.backgroundColor,
-        borderTopColor: ThemeParser.theme.loginTopBorderColor,
+        backgroundColor: ThemeParser.themeData.theme.backgroundColor,
+        borderTopColor: ThemeParser.themeData.theme.loginTopBorderColor,
         borderTopWidth: 4,
         paddingTop: 25
     },
@@ -55,7 +55,7 @@ const loginStyles = StyleSheet.create({
         borderRadius: (Info.WINDOW_WIDTH * 0.3) / 2
     },
     loginText: {
-        color: ThemeParser.theme.textColor,
+        color: ThemeParser.themeData.theme.textColor,
         fontSize: 28,
         fontFamily: 'Arial',
         fontWeight: 'bold',
@@ -67,7 +67,7 @@ const loginStyles = StyleSheet.create({
     },
     token: {
         width: Info.WINDOW_WIDTH / 4,
-        color: ThemeParser.theme.textColor,
+        color: ThemeParser.themeData.theme.textColor,
         fontWeight: 'bold',
         paddingLeft: 5
     }

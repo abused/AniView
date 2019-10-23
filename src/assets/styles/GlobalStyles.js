@@ -10,7 +10,7 @@ const globalStyles = StyleSheet.create({
         height: Info.WINDOW_HEIGHT
     },
     buttonText: {
-        color: ThemeParser.theme.buttonTextColor,
+        color: ThemeParser.themeData.theme.buttonTextColor,
         fontWeight: 'bold',
         fontSize: 20
     },

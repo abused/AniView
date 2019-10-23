@@ -1,8 +1,8 @@
 {
   "name": "Test",
-  "backgroundColor": "green",
+  "backgroundColor": "#047A9E",
   "navBackgroundColor": "#343434",
-  "blueColor": "yellow",
+  "blueColor": "#343434",
   "redColor": "white",
   "darkBlueColor": "#047A9E",
   "placeholderColor": "#545454",
