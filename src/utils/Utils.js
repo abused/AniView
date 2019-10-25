@@ -1,5 +1,4 @@
 import * as SecureStore from 'expo-secure-store/build/SecureStore';
-import NetInfo from '@react-native-community/netinfo';
 
 async function storeData(key, value) {
     try {

@@ -5,24 +5,20 @@ const themes = {
 };
 
 function parseTheme(json) {
-    let theme = {};
-
-    theme.name = json.name;
-    theme.backgroundColor = json.backgroundColor;
-    theme.navBackgroundColor = json.navBackgroundColor;
-    theme.blueColor = json.blueColor;
-    theme.redColor = json.redColor;
-    theme.darkBlueColor = json.darkBlueColor;
-    theme.placeholderColor = json.placeholderColor;
-    theme.buttonTextColor = json.buttonTextColor;
-    theme.iconColor = json.iconColor;
-    theme.textColor = json.textColor;
-    theme.navInactiveColor = json.navInactiveColor;
-    theme.navActiveColor = json.navActiveColor;
-    theme.borderColor = json.borderColor;
-    theme.buttonRightBorderColor = json.buttonRightBorderColor;
-
-    return theme;
+    module.exports.themeData.theme.name = json.name;
+    module.exports.themeData.theme.backgroundColor = json.backgroundColor;
+    module.exports.themeData.theme.navBackgroundColor = json.navBackgroundColor;
+    module.exports.themeData.theme.blueColor = json.blueColor;
+    module.exports.themeData.theme.redColor = json.redColor;
+    module.exports.themeData.theme.darkBlueColor = json.darkBlueColor;
+    module.exports.themeData.theme.placeholderColor = json.placeholderColor;
+    module.exports.themeData.theme.buttonTextColor = json.buttonTextColor;
+    module.exports.themeData.theme.iconColor = json.iconColor;
+    module.exports.themeData.theme.textColor = json.textColor;
+    module.exports.themeData.theme.navInactiveColor = json.navInactiveColor;
+    module.exports.themeData.theme.navActiveColor = json.navActiveColor;
+    module.exports.themeData.theme.borderColor = json.borderColor;
+    module.exports.themeData.theme.buttonRightBorderColor = json.buttonRightBorderColor;
 }
 
 module.exports = {
@@ -30,7 +26,7 @@ module.exports = {
     themeData: {
         theme: themes['DEFAULT'],
         loadTheme: function(json) {
-            this.theme = json;
+            parseTheme(json);
         }
     }
 };
