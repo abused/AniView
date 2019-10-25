@@ -45,7 +45,7 @@ const loginStyles = StyleSheet.create({
         width: Info.WINDOW_WIDTH,
         height: Info.WINDOW_HEIGHT * 0.6,
         backgroundColor: ThemeParser.themeData.theme.backgroundColor,
-        borderTopColor: ThemeParser.themeData.theme.loginTopBorderColor,
+        borderTopColor: ThemeParser.themeData.theme.borderColor,
         borderTopWidth: 4,
         paddingTop: 25
     },
@@ -57,7 +57,7 @@ const loginStyles = StyleSheet.create({
     loginText: {
         color: ThemeParser.themeData.theme.textColor,
         fontSize: 28,
-        fontFamily: 'Arial',
+        fontFamily: 'Roboto',
         fontWeight: 'bold',
         position: 'absolute',
         bottom: 0,

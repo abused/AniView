@@ -8,10 +8,9 @@
   "placeholderColor": "#545454",
   "buttonTextColor": "white",
   "textColor": "white",
-  "iconColor": "#047A9E",
-  "iconActiveColor": "#05B7ED",
-  "navTextColor": "#C1C1C1",
-  "navActiveTextColor": "white",
-  "loginTopBorderColor": "#FE5656",
+  "iconColor": "#05B7ED",
+  "navInactiveColor": "#C1C1C1",
+  "navActiveColor": "white",
+  "borderColor": "#FE5656",
   "buttonRightBorderColor": "black"
 }

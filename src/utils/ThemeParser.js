@@ -15,12 +15,11 @@ function parseTheme(json) {
     theme.darkBlueColor = json.darkBlueColor;
     theme.placeholderColor = json.placeholderColor;
     theme.buttonTextColor = json.buttonTextColor;
-    theme.textColor = json.textColor;
     theme.iconColor = json.iconColor;
-    theme.iconActiveColor = json.iconActiveColor;
-    theme.navTextColor = json.navTextColor;
-    theme.navActiveTextColor = json.navActiveTextColor;
-    theme.loginTopBorderColor = json.loginTopBorderColor;
+    theme.textColor = json.textColor;
+    theme.navInactiveColor = json.navInactiveColor;
+    theme.navActiveColor = json.navActiveColor;
+    theme.borderColor = json.borderColor;
     theme.buttonRightBorderColor = json.buttonRightBorderColor;
 
     return theme;
@@ -29,9 +28,9 @@ function parseTheme(json) {
 module.exports = {
     themes: themes,
     themeData: {
-        theme: parseTheme(themes['DEFAULT']),
+        theme: themes['DEFAULT'],
         loadTheme: function(json) {
-            this.theme = parseTheme(json);
+            this.theme = json;
         }
     }
 };
