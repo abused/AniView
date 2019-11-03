@@ -1,32 +1,45 @@
-//TODO PARSE THEMES FROM GITHUB REPO SO THAT THEY CAN BE EDITED EASILY!
 const themes = {
-    'DEFAULT': require('./../assets/themes/default.json'),
-    'TEST': require('./../assets/themes/test.json')
+    DEFAULT: require('./../assets/themes/default.json'),
 };
 
-function parseTheme(json) {
-    module.exports.themeData.theme.name = json.name;
-    module.exports.themeData.theme.backgroundColor = json.backgroundColor;
-    module.exports.themeData.theme.navBackgroundColor = json.navBackgroundColor;
-    module.exports.themeData.theme.blueColor = json.blueColor;
-    module.exports.themeData.theme.redColor = json.redColor;
-    module.exports.themeData.theme.darkBlueColor = json.darkBlueColor;
-    module.exports.themeData.theme.placeholderColor = json.placeholderColor;
-    module.exports.themeData.theme.buttonTextColor = json.buttonTextColor;
-    module.exports.themeData.theme.iconColor = json.iconColor;
-    module.exports.themeData.theme.textColor = json.textColor;
-    module.exports.themeData.theme.navInactiveColor = json.navInactiveColor;
-    module.exports.themeData.theme.navActiveColor = json.navActiveColor;
-    module.exports.themeData.theme.borderColor = json.borderColor;
-    module.exports.themeData.theme.buttonRightBorderColor = json.buttonRightBorderColor;
+function loadTheme(theme) {
+    module.exports.name = theme.name;
+    module.exports.backgroundColor = theme.backgroundColor;
+    module.exports.navBackgroundColor = theme.navBackgroundColor;
+    module.exports.blueColor = theme.blueColor;
+    module.exports.redColor = theme.redColor;
+    module.exports.darkBlueColor = theme.darkBlueColor;
+    module.exports.placeholderColor = theme.placeholderColor;
+    module.exports.buttonTextColor = theme.buttonTextColor;
+    module.exports.textColor = theme.textColor;
+    module.exports.iconColor = theme.iconColor;
+    module.exports.navInactiveColor = theme.navInactiveColor;
+    module.exports.navActiveColor = theme.navActiveColor;
+    module.exports.borderColor = theme.borderColor;
+    module.exports.buttonRightBorderColor = theme.buttonRightBorderColor;
+    module.exports.boxShadowColor = theme.boxShadowColor;
+    module.exports.animeTitleBackgroundColor = theme.animeTitleBackgroundColor;
+    module.exports.textShadowColor = theme.textShadowColor;
 }
 
+loadTheme(themes.DEFAULT);
 module.exports = {
     themes: themes,
-    themeData: {
-        theme: themes['DEFAULT'],
-        loadTheme: function(json) {
-            parseTheme(json);
-        }
-    }
+    loadTheme: loadTheme,
+    backgroundColor: themes.DEFAULT.backgroundColor,
+    navBackgroundColor: themes.DEFAULT.navBackgroundColor,
+    blueColor: themes.DEFAULT.blueColor,
+    redColor: themes.DEFAULT.redColor,
+    darkBlueColor: themes.DEFAULT.darkBlueColor,
+    placeholderColor: themes.DEFAULT.placeholderColor,
+    buttonTextColor: themes.DEFAULT.buttonTextColor,
+    textColor: themes.DEFAULT.textColor,
+    iconColor: themes.DEFAULT.iconColor,
+    navInactiveColor: themes.DEFAULT.navInactiveColor,
+    navActiveColor: themes.DEFAULT.navActiveColor,
+    borderColor: themes.DEFAULT.borderColor,
+    buttonRightBorderColor: themes.DEFAULT.buttonRightBorderColor,
+    boxShadowColor: themes.DEFAULT.boxShadowColor,
+    animeTitleBackgroundColor: themes.DEFAULT.animeTitleBackgroundColor,
+    textShadowColor: themes.DEFAULT.textShadowColor
 };

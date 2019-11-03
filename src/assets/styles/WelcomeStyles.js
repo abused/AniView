@@ -1,6 +1,7 @@
 import {StyleSheet} from "react-native";
+
 const Info = require('../../utils/Info');
-const ThemeParser = require('../../utils/ThemeParser');
+const theme = require('../../utils/ThemeParser');
 
 const welcomeStyles = StyleSheet.create({
     background: {
@@ -14,7 +15,7 @@ const welcomeStyles = StyleSheet.create({
         alignSelf: 'center'
     },
     text: {
-        color: ThemeParser.themeData.theme.textColor,
+        color: theme.buttonTextColor,
         alignSelf: 'center',
         fontFamily: 'Arial',
     },
@@ -30,6 +31,7 @@ const welcomeStyles = StyleSheet.create({
 
 const loginStyles = StyleSheet.create({
     background: {
+        top: 0,
         flex: 1,
         width: Info.WINDOW_WIDTH,
         height: Info.WINDOW_HEIGHT * 0.4
@@ -44,8 +46,8 @@ const loginStyles = StyleSheet.create({
     loginView: {
         width: Info.WINDOW_WIDTH,
         height: Info.WINDOW_HEIGHT * 0.6,
-        backgroundColor: ThemeParser.themeData.theme.backgroundColor,
-        borderTopColor: ThemeParser.themeData.theme.borderColor,
+        backgroundColor: theme.backgroundColor,
+        borderTopColor: theme.borderColor,
         borderTopWidth: 4,
         paddingTop: 25
     },
@@ -55,7 +57,7 @@ const loginStyles = StyleSheet.create({
         borderRadius: (Info.WINDOW_WIDTH * 0.3) / 2
     },
     loginText: {
-        color: ThemeParser.themeData.theme.textColor,
+        color: theme.buttonTextColor,
         fontSize: 28,
         fontFamily: 'Roboto',
         fontWeight: 'bold',
@@ -67,7 +69,7 @@ const loginStyles = StyleSheet.create({
     },
     token: {
         width: Info.WINDOW_WIDTH / 4,
-        color: ThemeParser.themeData.theme.textColor,
+        color: theme.textColor,
         fontWeight: 'bold',
         paddingLeft: 5
     }

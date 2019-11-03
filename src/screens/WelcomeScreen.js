@@ -26,11 +26,11 @@ export default class WelcomeScreen extends React.Component {
 
                     <View style={{flex: 1, justifyContent: 'flex-end'}}>
                         <View style={{flexDirection: 'row'}}>
-                            <TouchableOpacity style={[GlobalStyles.globalStyles.halfButton, {backgroundColor: ThemeParser.themeData.theme.blueColor, borderRightColor: ThemeParser.themeData.theme.buttonRightBorderColor, borderRightWidth: 4}]} onPress={() => this.props.navigation.navigate('Login')}>
+                            <TouchableOpacity style={[GlobalStyles.globalStyles.halfButton, {backgroundColor: ThemeParser.blueColor, borderRightColor: ThemeParser.buttonRightBorderColor, borderRightWidth: 4}]} onPress={() => this.props.navigation.navigate('Login')}>
                                 <Text style={GlobalStyles.globalStyles.buttonText}>AniList Sign In</Text>
                             </TouchableOpacity>
 
-                            <TouchableOpacity style={[GlobalStyles.globalStyles.halfButton, {backgroundColor: ThemeParser.themeData.theme.redColor}]} onPress={() => {
+                            <TouchableOpacity style={[GlobalStyles.globalStyles.halfButton, {backgroundColor: ThemeParser.redColor}]} onPress={() => {
                                 Utils.storeData('showWelcome', 'false').then(value => {
                                     this.props.navigation.navigate('Main');
                                 });

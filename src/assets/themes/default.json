@@ -1,16 +1,19 @@
 {
   "name": "Default",
-  "backgroundColor": "#1D1D1D",
-  "navBackgroundColor": "#343434",
-  "blueColor": "#05b7ed",
-  "redColor": "#FF5757",
+  "backgroundColor": "#272C38",
+  "navBackgroundColor": "#1F232D",
+  "blueColor": "#3DB4F2",
+  "redColor": "#E85D75",
   "darkBlueColor": "#047A9E",
   "placeholderColor": "#545454",
   "buttonTextColor": "white",
-  "textColor": "white",
+  "textColor": "rgb(163, 185, 204)",
   "iconColor": "#05B7ED",
-  "navInactiveColor": "#C1C1C1",
+  "navInactiveColor": "rgb(159, 173, 189)",
   "navActiveColor": "white",
-  "borderColor": "#FE5656",
-  "buttonRightBorderColor": "black"
+  "borderColor": "#3DB4F2",
+  "buttonRightBorderColor": "black",
+  "boxShadowColor": "white",
+  "animeTitleBackgroundColor": "rgb(25, 29, 38)",
+  "textShadowColor": "black"
 }

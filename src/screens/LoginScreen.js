@@ -8,6 +8,7 @@ const GlobalStyles = require('../assets/styles/GlobalStyles');
 const AniListAuth = require('../utils/AniListAuth');
 const Info = require('../utils/Info');
 const ThemeParser = require('../utils/ThemeParser');
+const Utils = require('../utils/Utils');
 
 export default class LoginScreen extends React.Component {
     static navigationOptions = {
@@ -32,20 +33,28 @@ export default class LoginScreen extends React.Component {
                     <View style={WelcomeStyles.loginStyles.loginView}>
                         <Input
                             placeholder='Token'
-                            placeholderTextColor={ThemeParser.themeData.theme.placeholderColor}
+                            placeholderTextColor={ThemeParser.placeholderColor}
                             returnKeyType='done'
                             inputStyle={WelcomeStyles.loginStyles.token}
-                            leftIcon={<Ionicons name='md-key' size={32} color={ThemeParser.themeData.theme.blueColor} />}
+                            leftIcon={<Ionicons name='md-key' size={32} color={ThemeParser.blueColor} />}
                             onChangeText={text => this.setState({token: text})}
                         />
 
                         <View style={{flex: 1, justifyContent: 'flex-end'}}>
                             <View style={{flexDirection: 'row'}}>
-                                <TouchableOpacity style={[GlobalStyles.globalStyles.halfButton, {backgroundColor: ThemeParser.themeData.theme.blueColor, borderRightColor: ThemeParser.themeData.theme.buttonRightBorderColor, borderRightWidth: 4}]} onPress={() => AniListAuth.getALCode()}>
+                                <TouchableOpacity style={[GlobalStyles.globalStyles.halfButton, {backgroundColor: ThemeParser.blueColor, borderRightColor: ThemeParser.buttonRightBorderColor, borderRightWidth: 4}]} onPress={() => AniListAuth.getALCode()}>
                                     <Text style={GlobalStyles.globalStyles.buttonText}>Get Code</Text>
                                 </TouchableOpacity>
 
-                                <TouchableOpacity style={[GlobalStyles.globalStyles.halfButton, {backgroundColor: ThemeParser.themeData.theme.redColor}]} onPress={() => AniListAuth.login(this.state.token)}>
+                                <TouchableOpacity style={[GlobalStyles.globalStyles.halfButton, {backgroundColor: ThemeParser.redColor}]} onPress={() => {
+                                    AniListAuth.login(this.state.token).then(value => {
+                                        if(AniListAuth.loggedIn) {
+                                            Utils.storeData('showWelcome', 'false').then(value => {
+                                                this.props.navigation.navigate('Main');
+                                            });
+                                        }
+                                    });
+                                }}>
                                     <Text style={GlobalStyles.globalStyles.buttonText}>Sign In</Text>
                                 </TouchableOpacity>
                             </View>

@@ -1,7 +1,7 @@
 import {StyleSheet} from "react-native";
 
 const Info = require('../../utils/Info');
-const ThemeParser = require('../../utils/ThemeParser');
+const theme = require('../../utils/ThemeParser');
 
 const globalStyles = StyleSheet.create({
     container: {
@@ -11,7 +11,7 @@ const globalStyles = StyleSheet.create({
         height: Info.WINDOW_HEIGHT
     },
     buttonText: {
-        color: ThemeParser.themeData.theme.buttonTextColor,
+        color: theme.buttonTextColor,
         fontWeight: 'bold',
         fontSize: 20
     },
@@ -27,19 +27,31 @@ const globalStyles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
+    ovalButton: {
+        width: Info.WINDOW_WIDTH * 0.7,
+        height: 0.06 * Info.WINDOW_HEIGHT,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 30
+    },
     navigation: {
-        backgroundColor: ThemeParser.themeData.theme.navBackgroundColor,
-        borderTopColor: ThemeParser.themeData.theme.borderColor,
+        backgroundColor: theme.navBackgroundColor,
+        borderTopColor: theme.borderColor,
         borderTopWidth: 3
     },
     header: {
-        color: ThemeParser.themeData.theme.textColor,
-        backgroundColor: ThemeParser.themeData.theme.navBackgroundColor,
-        borderBottomColor: ThemeParser.themeData.theme.borderColor,
+        color: theme.textColor,
+        backgroundColor: theme.navBackgroundColor,
+        borderBottomColor: theme.borderColor,
         borderBottomWidth: 3
     },
+    noBorderHeader: {
+        color: theme.textColor,
+        backgroundColor: theme.navBackgroundColor,
+        borderBottomWidth: 0
+    },
     headerText: {
-        color: ThemeParser.themeData.theme.textColor,
+        color: theme.textColor,
         fontFamily: 'Roboto',
         fontSize: 22
     },
