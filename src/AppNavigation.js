@@ -8,7 +8,6 @@ import WelcomeScreen from './screens/WelcomeScreen';
 import LoginScreen from './screens/LoginScreen';
 import HomeScreen from './screens/HomeScreen';
 import MyAnimeListScreen from './screens/MyAnimeListScreen';
-import DownloadsScreen from './screens/DownloadsScreen';
 import SearchScreen from './screens/SearchScreen';
 import SettingsScreen from './screens/SettingsScreen';
 const ThemeParser = require('./utils/ThemeParser');
@@ -16,7 +15,6 @@ const GlobalStyles = require('./assets/styles/GlobalStyles');
 
 const HomeStack = createStackNavigator({Home: {screen: HomeScreen}}, {initialRouteName: 'Home'});
 const ListStack = createStackNavigator({List: {screen: MyAnimeListScreen}}, {initialRouteName: 'List'});
-const DownloadsStack = createStackNavigator({Downloads: {screen: DownloadsScreen}}, {initialRouteName: 'Downloads'});
 const SearchStack = createStackNavigator({Search: {screen: SearchScreen}}, {initialRouteName: 'Search'});
 const SettingsStack = createStackNavigator({Settings: {screen: SettingsScreen}}, {initialRouteName: 'Settings'});
 const MainStack = createMaterialBottomTabNavigator(
@@ -33,13 +31,6 @@ const MainStack = createMaterialBottomTabNavigator(
             navigationOptions: {
                 tabBarLabel: <Text style={{fontSize: 14}}>List</Text>,
                 tabBarIcon: ({tintColor}) => (<FontAwesome color={tintColor} size={24} name='list' />)
-            }
-        },
-        Downloads: {
-            screen: DownloadsStack,
-            navigationOptions: {
-                tabBarLabel: <Text style={{fontSize: 14}}>D/L</Text>,
-                tabBarIcon: ({tintColor}) => (<FontAwesome color={tintColor} size={24} name='download' />)
             }
         },
         Search: {

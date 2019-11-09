@@ -9,10 +9,15 @@
   },
   "dependencies": {
     "expo": "^35.0.0",
+    "expo-av": "~7.0.0",
+    "expo-background-fetch": "^7.0.0",
     "expo-secure-store": "^7.0.0",
+    "expo-task-manager": "~7.0.0",
+    "native-base-shoutem-theme": "git+https://github.com/GeekyAnts/theme.git",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-35.0.0.tar.gz",
+    "react-native-collapsible": "^1.5.1",
     "react-native-elements": "^1.2.6",
     "react-native-gesture-handler": "^1.4.1",
     "react-native-modalbox": "^2.0.0",
@@ -21,6 +26,7 @@
     "react-native-read-more-text": "^1.1.0",
     "react-native-vector-icons": "^6.6.0",
     "react-native-web": "^0.11.7",
+    "react-native-webview": "^7.4.3",
     "react-navigation": "^4.0.10",
     "react-navigation-material-bottom-tabs": "^2.1.5",
     "react-navigation-stack": "^1.10.3"

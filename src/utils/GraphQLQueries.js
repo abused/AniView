@@ -11,6 +11,26 @@ const loginQuery = `
 }
 `;
 
+const notificationsQuery = `
+query($types: [NotificationType]) {
+    Viewer {
+        unreadNotificationCount
+    }
+    Page(perPage: 20) {
+        notifications(resetNotificationCount: true, type_in: $types) {
+            ... on AiringNotification {
+                media {
+                    title {
+                        userPreferred
+                    }
+                }
+                episode
+            }
+        }
+    }
+}
+`;
+
 const trendingAnimeQuery = `
 {
     Page(perPage: 50) {
@@ -75,6 +95,9 @@ query($animeId: Int) {
             title
             thumbnail
         }
+        nextAiringEpisode {
+            episode
+        }
     }
 }
 `;
@@ -97,10 +120,22 @@ query ($search: String) {
 }
 `;
 
+const getAnimeEpisodes = `
+query($animeId: Int) {
+    Media(id: $animeId) {
+        nextAiringEpisode {
+            episode
+        }
+    }
+}
+`;
+
 module.exports = {
   loginQuery: loginQuery,
+  notificationsQuery: notificationsQuery,
   trendingAnimeQuery: trendingAnimeQuery,
   watchingAnimeQuery: watchingAnimeQuery,
   getAnimeQuery: getAnimeQuery,
-  searchAnimeQuery: searchAnimeQuery
+  searchAnimeQuery: searchAnimeQuery,
+  getAnimeEpisodes: getAnimeEpisodes
 };

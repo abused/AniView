@@ -1,0 +1,19 @@
+{
+  "name": "Light Theme",
+  "backgroundColor": "#D6E0EF",
+  "navBackgroundColor": "#1F232D",
+  "blueColor": "#3DB4F2",
+  "redColor": "#E85D75",
+  "darkBlueColor": "#047A9E",
+  "placeholderColor": "#545454",
+  "buttonTextColor": "white",
+  "textColor": "rgb(92, 114, 138)",
+  "iconColor": "#05B7ED",
+  "navInactiveColor": "rgb(159, 173, 189)",
+  "navActiveColor": "white",
+  "borderColor": "#3DB4F2",
+  "buttonRightBorderColor": "black",
+  "boxShadowColor": "white",
+  "animeTitleBackgroundColor": "#F5F6F9",
+  "textShadowColor": "white"
+}

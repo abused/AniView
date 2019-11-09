@@ -1,6 +1,8 @@
+//TODO SWITCH BACK TO ANILIST ONCE THEY MOVE AWAY FROM CRUNCHYROLL!
 import {Alert, Linking} from "react-native";
-import {loginQuery, trendingAnimeQuery, watchingAnimeQuery, searchAnimeQuery, getAnimeQuery} from './GraphQLQueries';
+import {loginQuery, notificationsQuery, trendingAnimeQuery, watchingAnimeQuery, searchAnimeQuery, getAnimeQuery, getAnimeEpisodes} from './GraphQLQueries';
 const Utils = require('./Utils');
+const KitsuAniUtils = require('./KitsuAniUtils');
 
 const clientID = 1336;
 const authURL = 'https://anilist.co/api/v2/oauth/authorize?client_id=' + clientID + '&response_type=token';
@@ -60,6 +62,19 @@ async function login(token) {
     }
 }
 
+async function getUnreadNotifications() {
+    return await fetchQuery(notificationsQuery, await Utils.retrieveData('userToken'), {types: ['AIRING']}).then(handleResponse).then(handleData);
+
+    function handleData(data) {
+        console.log(data);
+        for (let i = 0; i < data.data.Viewer.unreadNotificationsCount; i++) {
+            data.data.Page.notifications[i].unread = true;
+        }
+
+        return data;
+    }
+}
+
 async function getMostPopularAnime() {
     return await fetchQuery(trendingAnimeQuery).then(handleResponse).then(handleData).catch(handleError);
 
@@ -108,6 +123,83 @@ async function getAnime(id) {
     return await fetchQuery(getAnimeQuery, null, {animeId: id}).then(handleResponse);
 }
 
+//Switched to Kitsu for now
+async function getAnimeByName(name) {
+    return await KitsuAniUtils.searchAnime(name).then(async data => {
+        let convertedData = {
+            id: data.data[0].id,
+            episodes: data.data[0].attributes.episodeCount,
+            description: data.data[0].attributes.synopsis,
+            genres: [],
+            title: {
+                english: data.data[0].attributes.titles.en,
+                romaji: data.data[0].attributes.titles.en_jp
+            },
+            coverImageValid: data.data[0].attributes.coverImage ? true : false,
+            bannerImage: data.data[0].attributes.coverImage ? data.data[0].attributes.coverImage.original : data.data[0].attributes.posterImage.large,
+            coverImage: {
+                large: data.data[0].attributes.posterImage.medium,
+                extraLarge:  data.data[0].attributes.posterImage.original,
+            },
+            streamingEpisodes: [],
+            nextAiringEpisode: null,
+            episodesLink: data.data[0].relationships.episodes.links.related,
+            genresLink: data.data[0].relationships.categories.links.related
+        };
+
+        let count = 1;
+        await fetchQuery(searchAnimeQuery, null, {search: convertedData.title.english ? convertedData.title.english : convertedData.title.romaji}).then(handleResponse).then(async aniData => {
+            await fetchQuery(getAnimeEpisodes, null, {animeId: aniData.data.Page.media[0].id}).then(handleResponse).then(episodeData => {
+                count = episodeData.data.Media.nextAiringEpisode ? episodeData.data.Media.nextAiringEpisode.episode - 1 : data.data[0].attributes.episodeCount;
+            }).catch(handleError);
+        }).catch(handleError);
+
+        if(count > 20) {
+            for (let i = 0; i < count / 20; i++) {
+                await KitsuAniUtils.fetchQuery(data.data[0].relationships.episodes.links.related + '?page[limit]=20&page[offset]=' + i * 20).then(handleResponse).then(episodeData => {
+                    episodeData.data.forEach(episode => {
+                        if (episode.attributes.titles.en_us) {
+                            convertedData.streamingEpisodes.push({
+                                title: 'Episode ' + episode.attributes.number + ' - ' + episode.attributes.titles.en_us,
+                                thumbnail: episode.attributes.thumbnail.original
+                            });
+                        }else if(episode.attributes.number === count) {
+                            convertedData.streamingEpisodes.push({
+                                title: 'Episode ' + episode.attributes.number + ' - N/A',
+                                thumbnail: convertedData.bannerImage
+                            });
+                        }
+                    });
+                }).catch(handleError);
+            }
+        }else {
+            await KitsuAniUtils.fetchQuery(data.data[0].relationships.episodes.links.related + '?page[limit]=20').then(handleResponse).then(episodeData => {
+                episodeData.data.forEach(episode => {
+                    if (episode.attributes.titles.en_us) {
+                        convertedData.streamingEpisodes.push({
+                            title: 'Episode ' + episode.attributes.number + ' - ' + episode.attributes.titles.en_us,
+                            thumbnail: episode.attributes.thumbnail.original
+                        });
+                    }else if(episode.attributes.airdate) {
+                        convertedData.streamingEpisodes.push({
+                            title: 'Episode ' + episode.attributes.number + ' - Title Not Currently Available!',
+                            thumbnail: convertedData.bannerImage
+                        });
+                    }
+                });
+            }).catch(handleError);
+        }
+
+        await KitsuAniUtils.fetchQuery(data.data[0].relationships.categories.links.related).then(handleResponse).then(genreData => {
+            genreData.data.forEach(genre => {
+                convertedData.genres.push(genre.attributes.title);
+            });
+        }).catch(handleError);
+
+        return convertedData;
+    });
+}
+
 function handleResponse(response) {
     return response.json().then(function (json) {
         return response.ok ? json : Promise.reject(json);
@@ -140,12 +232,14 @@ module.exports = {
     graphURL: graphURL,
     getALCode: getALCode,
     login: login,
+    getUnreadNotifications: getUnreadNotifications,
     getMostPopularAnime: getMostPopularAnime,
     getWatchingAnime: getWatchingAnime,
     loadUserData: loadUserData,
     getSearchResults: getSearchResults,
     logout: logout,
-    getAnime: getAnime,
+    //getAnime: getAnime,
+    getAnimeByName: getAnimeByName,
     handleError: handleError,
     loggedIn: false,
     userToken: '',

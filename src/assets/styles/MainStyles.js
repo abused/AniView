@@ -10,7 +10,7 @@ const homeStyles = StyleSheet.create({
     animeCard: {
         margin: 5,
         width: cardWidth,
-        height: cardHeight + (cardHeight / 4)
+        height: cardHeight + (cardHeight / 4),
     },
     cardContent: {
         width: '100%',
@@ -27,7 +27,8 @@ const homeStyles = StyleSheet.create({
         textShadowColor: theme.textShadowColor,
         textShadowOffset: {width: -1, height: -1},
         textShadowRadius: 1,
-        color: theme.textColor
+        color: theme.textColor,
+        marginLeft: 5
     },
     animeTitleCard: {
         width: cardWidth,
@@ -72,7 +73,8 @@ const listStyles = StyleSheet.create({
     },
     animeInfo: {
         flexWrap: 'wrap',
-        color: theme.textColor
+        color: theme.textColor,
+        marginBottom: 5
     }
 });
 
@@ -122,60 +124,57 @@ const searchStyles = StyleSheet.create({
 });
 
 const settingsStyles = StyleSheet.create({
+    category: {
+        borderBottomColor: theme.blueColor,
+        borderBottomWidth: 2,
+        marginTop: 20,
+        paddingLeft: '2.5%'
+    },
     specialText: {
-        color: theme.redColor,
-        fontSize: 28,
+        color: theme.textColor,
+        fontWeight: 'lighter',
+        fontSize: 16,
         marginTop: 10,
-        marginBottom: 5,
+        marginBottom: 10,
     },
     nameText: {
         color: theme.textColor,
         fontSize: 28,
     },
-    categoryText: {
+    optionText: {
         color: theme.textColor,
         fontSize: 22,
+        paddingLeft: '2.5%'
     },
     aboutText: {
         color: theme.textColor,
-        fontSize: '20'
+        fontSize: 20
     },
     profile: {
         borderBottomColor: theme.borderColor,
-        flexDirection: 'column',
+        flexDirection: 'row',
         alignItems: 'center',
-        borderBottomWidth: 1,
-        margin: 10
+        justifyContent: 'center',
+        borderBottomWidth: 2,
+        margin: 10,
+        paddingBottom: 10
     },
     profilePic: {
         width: Info.WINDOW_WIDTH * 0.15,
         height: Info.WINDOW_WIDTH * 0.15,
-        borderRadius: (Info.WINDOW_WIDTH * 0.15) / 2,
+        borderRadius: 10,
         marginRight: 10
     },
-    options: {
-        backgroundColor: theme.navBackgroundColor,
-        width: '90%',
-        marginLeft: '5%',
-        borderRadius: 10,
-        flexDirection: 'column'
-    },
     option: {
-        backgroundColor: theme.backgroundColor,
-        borderBottomColor: theme.blueColor,
-        justifyContent: 'flex-end',
+        flexDirection: 'row',
         alignItems: 'center',
-        height: 40,
-        borderBottomWidth: 2,
-        borderTopRightRadius: 5,
-        borderTopLeftRadius: 5,
-        marginLeft: 10,
-        marginRight: 10,
-        marginTop: 10,
-        marginBottom: 10
+        backgroundColor: theme.animeTitleBackgroundColor,
+        borderBottomColor: theme.textColor,
+        height: 50,
+        borderBottomWidth: 1
     },
-    headerView: {
-        alignItems: 'center'
+    mainSection: {
+        width: '100%',
     },
     closeButtonContainer: {
         width: '100%',
@@ -188,6 +187,13 @@ const settingsStyles = StyleSheet.create({
         position: 'absolute',
         top: 0,
         right: 0
+    },
+    themeView: {
+        flexDirection: 'row',
+    },
+    themeOption: {
+        width: '50%',
+        alignItems: 'center',
     }
 });
 
@@ -200,8 +206,9 @@ const animeScreenStyles = StyleSheet.create({
         flexDirection: 'column'
     },
     contentContainer: {
-        width: '96%',
-        marginLeft: '2%'
+        width: '95%',
+        marginLeft: '2.5%%',
+        flexWrap: 'wrap'
     },
     closeButton: {
         flexDirection: 'row',
@@ -238,7 +245,7 @@ const animeScreenStyles = StyleSheet.create({
     genreView: {
         marginLeft: 3,
         marginRight: 3,
-        marginBottom: 3,
+        marginBottom: 10,
         borderRadius: 12,
         borderColor: theme.textColor,
         borderWidth: 0.5,
@@ -288,6 +295,16 @@ const animeScreenStyles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 14,
         marginTop: 5
+    },
+    animeWebView: {
+        width: '95%',
+        height: 260,
+        backgroundColor: 'transparent',
+        marginBottom: 5,
+        marginTop: 5,
+        marginLeft: '2.5%',
+        flexDirection: 'column',
+        alignItems: 'center'
     }
 });
 

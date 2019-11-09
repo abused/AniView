@@ -31,14 +31,14 @@ function secondsTimeFormat(seconds) {
 
     let dDisplay = d > 0 ? d + (d == 1 ? " day, " : " days, ") : "";
     let hDisplay = h > 0 ? h + (h == 1 ? " hour, " : " hours, ") : "";
-    let mDisplay = m > 0 ? m + (m == 1 ? " minute, " : " minutes ") : "";
+    let mDisplay = m > 0 ? m + (m == 1 ? " minute " : " minutes ") : "";
 
     return (d > 0 ? dDisplay : '') + hDisplay + mDisplay;
 }
 
 function renderTruncatedFooter(handlePress) {
     return (
-        <Text style={{color: ThemeParser.blueColor, marginTop: 5}} onPress={handlePress}>
+        <Text style={{color: ThemeParser.blueColor, marginTop: 5, marginBottom: 10}} onPress={handlePress}>
             Read more
         </Text>
     );
@@ -46,14 +46,14 @@ function renderTruncatedFooter(handlePress) {
 
 function renderRevealedFooter(handlePress) {
     return (
-        <Text style={{color: ThemeParser.blueColor, marginTop: 5}} onPress={handlePress}>
+        <Text style={{color: ThemeParser.blueColor, marginTop: 5, marginBottom: 10}} onPress={handlePress}>
             Show less
         </Text>
     );
 }
 
 function getEpisode(title) {
-    return title.replace(/[^0-9]+/g, "");
+    return title ? title.split(' - ')[0].replace('Episode ', '').replace(' ', '') : 0;
 }
 
 module.exports = {

@@ -15,12 +15,27 @@ const ABOUT = `
 AniView does not hose any of the content displayed.
 All content is scrapped from third party anime sites such as,
 GogoAnime, KissAnime, 4Anime, 9Anime
-Anime videos are simply played through your phone from the links on their website,
+Anime videos are streamed to your phone from the links on their websites,
 removing all advertisements with them.
 AniView does not take responsibility for any content you watch, it simply lists all anime from AniList,
 and proceeds to search third party anime sites to display the video from their sources.
 AniView is in no way affiliated with any of the third party streaming sites listed above.
 If you have any issues, please contact the respective media providers.
+`;
+
+const REMOVE_ADS = `
+(function() {
+  console.log('urnning things!');
+  var tags = document.getElementsByTagName('script');
+  for(var i = tags.length; i >= 0; i--) {
+    if(tags[i] && tags[i].getAttribute('src') != null && tags[i].getAttribute('src').indexOf('https://www.googletagmanager.com/gtag/js?id=UA-148184993-1') > -1) {
+      tags[i].parentNode.removeChild(tags[i]);
+      console.log('script removed!!!');
+      console.log('script removed!!!');
+      console.log('script removed!!!');
+    }
+  }
+})();
 `;
 
 module.exports = {
@@ -32,5 +47,6 @@ module.exports = {
   WINDOW_HEIGHT: WINDOW_HEIGHT,
   SPLASH: SPLASH,
   DISCORD_LINK: DISCORD_LINK,
-  ABOUT: ABOUT
+  ABOUT: ABOUT,
+  REMOVE_ADS: REMOVE_ADS
 };

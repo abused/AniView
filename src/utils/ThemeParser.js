@@ -1,9 +1,9 @@
 const themes = {
-    DEFAULT: require('./../assets/themes/default.json'),
+    DARK: require('./../assets/themes/dark.json'),
+    LIGHT: require('./../assets/themes/light.json'),
 };
 
 function loadTheme(theme) {
-    module.exports.name = theme.name;
     module.exports.backgroundColor = theme.backgroundColor;
     module.exports.navBackgroundColor = theme.navBackgroundColor;
     module.exports.blueColor = theme.blueColor;
@@ -22,24 +22,23 @@ function loadTheme(theme) {
     module.exports.textShadowColor = theme.textShadowColor;
 }
 
-loadTheme(themes.DEFAULT);
 module.exports = {
     themes: themes,
     loadTheme: loadTheme,
-    backgroundColor: themes.DEFAULT.backgroundColor,
-    navBackgroundColor: themes.DEFAULT.navBackgroundColor,
-    blueColor: themes.DEFAULT.blueColor,
-    redColor: themes.DEFAULT.redColor,
-    darkBlueColor: themes.DEFAULT.darkBlueColor,
-    placeholderColor: themes.DEFAULT.placeholderColor,
-    buttonTextColor: themes.DEFAULT.buttonTextColor,
-    textColor: themes.DEFAULT.textColor,
-    iconColor: themes.DEFAULT.iconColor,
-    navInactiveColor: themes.DEFAULT.navInactiveColor,
-    navActiveColor: themes.DEFAULT.navActiveColor,
-    borderColor: themes.DEFAULT.borderColor,
-    buttonRightBorderColor: themes.DEFAULT.buttonRightBorderColor,
-    boxShadowColor: themes.DEFAULT.boxShadowColor,
-    animeTitleBackgroundColor: themes.DEFAULT.animeTitleBackgroundColor,
-    textShadowColor: themes.DEFAULT.textShadowColor
+    backgroundColor: themes.DARK.backgroundColor,
+    navBackgroundColor: themes.DARK.navBackgroundColor,
+    blueColor: themes.DARK.blueColor,
+    redColor: themes.DARK.redColor,
+    darkBlueColor: themes.DARK.darkBlueColor,
+    placeholderColor: themes.DARK.placeholderColor,
+    buttonTextColor: themes.DARK.buttonTextColor,
+    textColor: themes.DARK.textColor,
+    iconColor: themes.DARK.iconColor,
+    navInactiveColor: themes.DARK.navInactiveColor,
+    navActiveColor: themes.DARK.navActiveColor,
+    borderColor: themes.DARK.borderColor,
+    buttonRightBorderColor: themes.DARK.buttonRightBorderColor,
+    boxShadowColor: themes.DARK.boxShadowColor,
+    animeTitleBackgroundColor: themes.DARK.animeTitleBackgroundColor,
+    textShadowColor: themes.DARK.textShadowColor
 };
