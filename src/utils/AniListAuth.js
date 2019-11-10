@@ -198,6 +198,18 @@ async function handleEpisodeData(title, episode, list, banner) {
     }
 }
 
+function getEpisodeLink(episode) {
+    let ep;
+    module.exports.animeEpisodes.forEach(link => {
+        if(episode.indexOf(link.split('+')[link.split('+').length - 1]) > -1) {
+            ep = link;
+            return link;
+        }
+    });
+
+    return ep;
+}
+
 function handleResponse(response) {
     return response.json().then(function (json) {
         return response.ok ? json : Promise.reject(json);
@@ -238,6 +250,7 @@ module.exports = {
     logout: logout,
     //getAnime: getAnime,
     getAnimeByName: getAnimeByName,
+    getEpisodeLink: getEpisodeLink,
     handleError: handleError,
     loggedIn: false,
     userToken: '',

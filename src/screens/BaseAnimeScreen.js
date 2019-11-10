@@ -14,12 +14,7 @@ import Modal from 'react-native-modalbox';
 import ReadMore from "react-native-read-more-text";
 import {WebView} from "react-native-webview";
 import Accordion from 'react-native-collapsible/Accordion'
-import {
-    AdMobBanner,
-    AdMobInterstitial,
-    PublisherBanner,
-    AdMobRewarded
-} from 'expo-ads-admob';
+import {AdMobBanner} from 'expo-ads-admob';
 
 const MainStyles = require('../assets/styles/MainStyles');
 const ThemeParser = require('../utils/ThemeParser');
@@ -250,7 +245,7 @@ export default class BaseAnimeScreen extends React.Component {
                                       return (
                                           <WebView
                                               scrollEnabled={false}
-                                              source={{ uri: AniListAuth.animeEpisodes[Utils.getEpisode(item.title) - 1]}}
+                                              source={{ uri: AniListAuth.getEpisodeLink(Utils.getEpisode(item.title))}}
                                               onShouldStartLoadWithRequest={request => {
                                                   return request.url.startsWith('http://vidstreaming.io/streaming.php?id=');
                                               }}
