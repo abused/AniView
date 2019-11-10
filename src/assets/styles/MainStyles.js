@@ -10,7 +10,7 @@ const homeStyles = StyleSheet.create({
     animeCard: {
         margin: 5,
         width: cardWidth,
-        height: cardHeight + (cardHeight / 4),
+        height: cardHeight + (cardHeight / 3.5),
     },
     cardContent: {
         width: '100%',
@@ -32,7 +32,7 @@ const homeStyles = StyleSheet.create({
     },
     animeTitleCard: {
         width: cardWidth,
-        height: cardHeight / 4,
+        height: cardHeight / 3.5,
         backgroundColor: theme.animeTitleBackgroundColor,
         borderTopColor: theme.textColor,
         borderTopWidth: 2
@@ -207,7 +207,7 @@ const animeScreenStyles = StyleSheet.create({
     },
     contentContainer: {
         width: '95%',
-        marginLeft: '2.5%%',
+        marginLeft: '2.5%',
         flexWrap: 'wrap'
     },
     closeButton: {

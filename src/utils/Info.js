@@ -2,11 +2,11 @@ import {Dimensions} from 'react-native';
 
 const DISCORD_LINK = 'https://discord.gg/92pf3WY';
 
-const BACKGROUND = require('./../assets/images/background-light.jpg');
+const BACKGROUND = require('./../assets/images/background-light.png');
 const TRANS_LOGO = require('./../assets/images/transparent_logo.png');
 const WHITE_LOGO = require('./../assets/images/white_logo.png');
 const GRAY_LOGO = require('./../assets/images/gray_logo.png');
-const SPLASH = require('./../assets/images/splash.jpg');
+const SPLASH = require('./../assets/images/splash.png');
 
 const WINDOW_WIDTH = Dimensions.get('window').width;
 const WINDOW_HEIGHT = Dimensions.get('window').height;

@@ -55,6 +55,7 @@ export default class MyAnimeListScreen extends BaseAnimeScreen {
                                     inputStyle={WelcomeStyles.loginStyles.token}
                                     leftIcon={<FontAwesome color={ThemeParser.blueColor} size={32} name='sign-in' />}
                                     onChangeText={text => this.setState({token: text})}
+                                    removeClippedSubviews={false}
                                 />
 
                                 <View style={{flex: 1, justifyContent: 'space-around'}}>
@@ -81,8 +82,7 @@ export default class MyAnimeListScreen extends BaseAnimeScreen {
 
         if(this.state.animeLoaded) {
             return (
-                <SafeAreaView
-                    style={[GlobalStyles.globalStyles.safeContainer, {backgroundColor: ThemeParser.backgroundColor}]}>
+                <SafeAreaView style={[GlobalStyles.globalStyles.safeContainer, {backgroundColor: ThemeParser.backgroundColor}]}>
                     <NavigationEvents onDidFocus={() => this._loadAsync()} />
                     {this.AnimePageModal()}
 

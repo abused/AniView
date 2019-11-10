@@ -13,8 +13,13 @@ import {
 import Modal from 'react-native-modalbox';
 import ReadMore from "react-native-read-more-text";
 import {WebView} from "react-native-webview";
-import Collapsible from 'react-native-collapsible';
 import Accordion from 'react-native-collapsible/Accordion'
+import {
+    AdMobBanner,
+    AdMobInterstitial,
+    PublisherBanner,
+    AdMobRewarded
+} from 'expo-ads-admob';
 
 const MainStyles = require('../assets/styles/MainStyles');
 const ThemeParser = require('../utils/ThemeParser');
@@ -231,13 +236,8 @@ export default class BaseAnimeScreen extends React.Component {
                               activeSections={this.state.expanded >= 0 ? [this.state.expanded] : []}
                               renderHeader={(item) => {
                                   return (
-                                        <TouchableOpacity style={MainStyles.animeScreenStyles.episodeCard} onPress={async () => {
-                                            await AnimeUtils.getAnimeLink(this.state.anime.title.romaji, Utils.getEpisode(item.title), false).then(data => {
-                                                this.setState({expanded: Utils.getEpisode(item.title) - 1});
-                                            }).catch(err => {
-                                                AnimeUtils.anime = null;
-                                                console.error(err);
-                                            });
+                                        <TouchableOpacity style={MainStyles.animeScreenStyles.episodeCard} onPress={() => {
+                                            this.setState({expanded: Utils.getEpisode(item.title) - 1});
                                         }}>
 
                                             <Image source={{uri: item.thumbnail}} style={MainStyles.animeScreenStyles.animeImage} />
@@ -250,7 +250,7 @@ export default class BaseAnimeScreen extends React.Component {
                                       return (
                                           <WebView
                                               scrollEnabled={false}
-                                              source={{ uri: AnimeUtils.anime }}
+                                              source={{ uri: AniListAuth.animeEpisodes[Utils.getEpisode(item.title) - 1]}}
                                               onShouldStartLoadWithRequest={request => {
                                                   return request.url.startsWith('http://vidstreaming.io/streaming.php?id=');
                                               }}
@@ -270,6 +270,15 @@ export default class BaseAnimeScreen extends React.Component {
                                   console.log(sections.toString());
                                   this.setState({expanded: sections})
                               }}
+                          />
+                      </View>
+
+                      <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                          <AdMobBanner
+                              bannerSize='banner'
+                              adUnitID='ca-app-pub-6445224790923907/1898144067'
+                              servePersonalizedAds
+                              onDidFailToReceiveAdWithError={err => console.log(err)}
                           />
                       </View>
                   </ScrollView>
