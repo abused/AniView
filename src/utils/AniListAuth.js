@@ -160,14 +160,14 @@ async function getAnimeByName(name) {
             for (let i = 0; i < count / 20; i++) {
                 await KitsuAniUtils.fetchQuery(data.data[0].relationships.episodes.links.related + '?page[limit]=20&page[offset]=' + i * 20).then(handleResponse).then(episodeData => {
                     episodeData.data.forEach(async episode => {
-                        await handleEpisodeData(convertedData.title.romaji, episode, convertedData.streamingEpisodes, convertedData.bannerImage);
+                        await handleEpisodeData(convertedData.title.romaji, episode, convertedData.streamingEpisodes, convertedData.bannerImage, count);
                     });
                 }).catch(handleError);
             }
         }else {
             await KitsuAniUtils.fetchQuery(data.data[0].relationships.episodes.links.related + '?page[limit]=20').then(handleResponse).then(episodeData => {
                 episodeData.data.forEach(async episode => {
-                    await handleEpisodeData(convertedData.title.romaji, episode, convertedData.streamingEpisodes, convertedData.bannerImage);
+                    await handleEpisodeData(convertedData.title.romaji, episode, convertedData.streamingEpisodes, convertedData.bannerImage, count);
                 });
             }).catch(handleError);
         }
@@ -182,14 +182,14 @@ async function getAnimeByName(name) {
     });
 }
 
-async function handleEpisodeData(title, episode, list, banner) {
+async function handleEpisodeData(title, episode, list, banner, episodesCount) {
     if (episode.attributes.titles.en_us) {
         list.push({
             title: 'Episode ' + episode.attributes.number + ' - ' + episode.attributes.titles.en_us,
             thumbnail: episode.attributes.thumbnail.original
         });
         module.exports.animeEpisodes.push(await AnimeUtils.getAnimeLink(title, episode.attributes.number, false));
-    } else if (episode.attributes.airdate) {
+    } else if (episode.attributes.airdate || episode.attributes.number < episodesCount) {
         list.push({
             title: 'Episode ' + episode.attributes.number + ' - Title Not Currently Available!',
             thumbnail: banner

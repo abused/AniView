@@ -1,8 +1,8 @@
 import React from 'react';
-import {SafeAreaView, View, TouchableOpacity, Text, Image, Linking, Switch} from "react-native";
-import {BottomModal, ModalContent} from 'react-native-modals'
+import {SafeAreaView, View, TouchableOpacity, Text, Image, Linking, Switch, ScrollView} from "react-native";
 import {NavigationEvents} from "react-navigation";
 import FontAwesome5Icon from "react-native-vector-icons/FontAwesome5";
+import Modal from 'react-native-modalbox';
 
 const ThemeParser = require('./../utils/ThemeParser');
 const GlobalStyles = require('./../assets/styles/GlobalStyles');
@@ -48,17 +48,17 @@ export default class SettingsScreen extends React.Component {
             <SafeAreaView style={[GlobalStyles.globalStyles.safeContainer, {backgroundColor: ThemeParser.backgroundColor}]}>
                 <NavigationEvents onDidFocus={() => this.setRefreshing(false)} />
 
-                <BottomModal swipeDirection={'down'} height={0.8} visible={this.state.aboutVisible} onTouchOutside={() => this.setState({aboutVisible: false})} modalStyle={{backgroundColor: ThemeParser.backgroundColor}}>
-                    <ModalContent>
-                        <View style={MainStyles.settingsStyles.closeButtonContainer}>
-                            <TouchableOpacity onPress={() => this.setState({aboutVisible: false})}>
-                                <Text style={MainStyles.settingsStyles.closeButton}><FontAwesome5Icon name={'times'} size={32}/></Text>
-                            </TouchableOpacity>
-                        </View>
-
+                <Modal
+                    style={{backgroundColor: ThemeParser.backgroundColor, height: '85%', paddingLeft: '2%', paddingRight: '2%'}}
+                    position={'bottom'}
+                    swipeArea={Info.WINDOW_HEIGHT * 0.5}
+                    isOpen={this.state.aboutVisible}
+                    onClosed={() => this.setState({aboutVisible: false})}
+                >
+                    <ScrollView showsVerticalScrollIndicator={false}>
                         <Text style={MainStyles.settingsStyles.aboutText}>{Info.ABOUT}</Text>
-                    </ModalContent>
-                </BottomModal>
+                    </ScrollView>
+                </Modal>
 
                 <View style={MainStyles.settingsStyles.profile}>
                     <Image style={MainStyles.settingsStyles.profilePic} source={AniListAuth.loggedIn ? {uri: AniListAuth.userAvatar} : Info.WHITE_LOGO} />

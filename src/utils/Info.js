@@ -1,6 +1,6 @@
 import {Dimensions} from 'react-native';
 
-const DISCORD_LINK = 'https://discord.gg/92pf3WY';
+const DISCORD_LINK = 'https://discord.gg/KseTWt5';
 
 const BACKGROUND = require('./../assets/images/background-light.png');
 const TRANS_LOGO = require('./../assets/images/transparent_logo.png');
@@ -12,7 +12,7 @@ const WINDOW_WIDTH = Dimensions.get('window').width;
 const WINDOW_HEIGHT = Dimensions.get('window').height;
 
 const ABOUT = `
-AniView does not hose any of the content displayed.
+AniView does not host any of the content displayed.
 All content is scrapped from third party anime sites such as,
 GogoAnime, KissAnime, 4Anime, 9Anime
 Anime videos are streamed to your phone from the links on their websites,

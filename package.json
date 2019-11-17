@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "expo": "^35.0.0",
+    "expo-ads-admob": "~7.0.0",
     "expo-av": "~7.0.0",
     "expo-background-fetch": "^7.0.0",
     "expo-secure-store": "^7.0.0",
@@ -21,7 +22,6 @@
     "react-native-elements": "^1.2.6",
     "react-native-gesture-handler": "^1.4.1",
     "react-native-modalbox": "^2.0.0",
-    "react-native-modals": "^0.19.9",
     "react-native-paper": "^3.1.1",
     "react-native-read-more-text": "^1.1.0",
     "react-native-vector-icons": "^6.6.0",
@@ -29,8 +29,7 @@
     "react-native-webview": "^7.4.3",
     "react-navigation": "^4.0.10",
     "react-navigation-material-bottom-tabs": "^2.1.5",
-    "react-navigation-stack": "^1.10.3",
-    "expo-ads-admob": "~7.0.0"
+    "react-navigation-stack": "^1.10.3"
   },
   "devDependencies": {
     "babel-preset-expo": "^7.1.0"

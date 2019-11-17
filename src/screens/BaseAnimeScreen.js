@@ -7,8 +7,7 @@ import {
     ImageBackground,
     Image,
     ScrollView,
-    ActivityIndicator,
-    SafeAreaView,
+    ActivityIndicator
 } from "react-native";
 import Modal from 'react-native-modalbox';
 import ReadMore from "react-native-read-more-text";
@@ -20,9 +19,7 @@ const MainStyles = require('../assets/styles/MainStyles');
 const ThemeParser = require('../utils/ThemeParser');
 const AniListAuth = require('../utils/AniListAuth');
 const Utils = require('../utils/Utils');
-const Info = require('../utils/Info');
 const AnimeUtils = require('../utils/AnimeUtils');
-const KitsuAniUtils = require('../utils/KitsuAniUtils');
 
 export default class BaseAnimeScreen extends React.Component {
 
