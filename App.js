@@ -37,13 +37,11 @@ TaskManager.defineTask(NOTIFICATIONS_TASK, async ({data, error}) => {
         let token = await Utils.retrieveData('pushToken').then(async data => {
             return data ? data : await Notifications.getExpoPushTokenAsync();
         });
-        let notificationsEnabled = await Utils.retrieveData('notifications').then(data => {return data !== 'false';});
-
+        let notificationsEnabled = await Utils.retrieveData('notifications').then(data => {return data});
         if(AniListAuth.loggedIn && notificationsEnabled) {
             AniListAuth.getUnreadNotifications().then(async data => {
                 if (!data)
                     return;
-
 
                 await AniListAuth.getUnreadNotifications().then(data => {
                     data.data.Page.notifications.forEach(notification => {
@@ -64,7 +62,7 @@ TaskManager.defineTask(NOTIFICATIONS_TASK, async ({data, error}) => {
                                     sound: 'default',
                                     channelId: 'default',
                                 })
-                            }).then(response => response.json()).then(data => {}).catch(err => console.error(err));
+                            }).then(response => response.json()).then(data => {console.log(data)}).catch(err => console.error(err));
                         }
                     });
                 }).catch(err => console.log(err));
@@ -85,7 +83,7 @@ class LoadingScreen extends React.Component {
 
     _loadAsync = async () => {
         AniListAuth.loadUserData();
-        await BackgroundFetch.registerTaskAsync(NOTIFICATIONS_TASK);
+        BackgroundFetch.registerTaskAsync(NOTIFICATIONS_TASK);
         Utils.retrieveData('showWelcome').then(value => {
             this.props.navigation.navigate(value === 'false' ? 'Main' : 'Welcome');
         });

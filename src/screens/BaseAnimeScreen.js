@@ -96,7 +96,7 @@ export default class BaseAnimeScreen extends React.Component {
     };
 
     ListItem = (id, title, image, progress, episodes, nextAiring) => {
-        const episodesBehind = (nextAiring.episode -1) - progress;
+        const episodesBehind = (nextAiring ? nextAiring.episode -1 : episodes) - progress;
 
         return(
             <TouchableOpacity style={MainStyles.listStyles.animeCard} onPress={() => this.openAnime(id, title)}>
