@@ -262,12 +262,10 @@ const animeScreenStyles = StyleSheet.create({
     },
     episodeCard: {
         width: '100%',
-        height: cardHeight / 2,
-        backgroundColor: 'transparent',
+        height: 'auto',
+        backgroundColor: theme.animeTitleBackgroundColor,
         marginBottom: 5,
         marginTop: 5,
-        flexDirection: 'row',
-        alignItems: 'center'
     },
     animeImage: {
         width: cardWidth * 1.2,
@@ -294,7 +292,7 @@ const animeScreenStyles = StyleSheet.create({
         textShadowRadius: 1,
         fontWeight: 'bold',
         fontSize: 14,
-        marginTop: 5
+        padding: 10
     },
     animeWebView: {
         width: '95%',
@@ -305,6 +303,33 @@ const animeScreenStyles = StyleSheet.create({
         marginLeft: '2.5%',
         flexDirection: 'column',
         alignItems: 'center'
+    },
+    pageButton: {
+        backgroundColor: theme.darkBlueColor,
+        width: 'auto'
+    }
+});
+
+const pickerSelectStyles = StyleSheet.create({
+    inputIOS: {
+        fontSize: 16,
+        padding: 10,
+        paddingHorizontal: 10,
+        borderWidth: 2,
+        borderColor: theme.blueColor,
+        borderRadius: 4,
+        color: theme.buttonTextColor,
+        paddingRight: 30
+    },
+    inputAndroid: {
+        fontSize: 16,
+        paddingHorizontal: 10,
+        padding: 10,
+        borderWidth: 2,
+        borderColor: theme.blueColor,
+        borderRadius: 4,
+        color: theme.buttonTextColor,
+        paddingRight: 30
     }
 });
 
@@ -313,5 +338,6 @@ module.exports = {
     listStyles: listStyles,
     searchStyles: searchStyles,
     settingsStyles: settingsStyles,
-    animeScreenStyles: animeScreenStyles
+    animeScreenStyles: animeScreenStyles,
+    pickerSelectStyles: pickerSelectStyles
 };

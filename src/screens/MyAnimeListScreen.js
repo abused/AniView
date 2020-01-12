@@ -84,7 +84,7 @@ export default class MyAnimeListScreen extends BaseAnimeScreen {
             return (
                 <SafeAreaView style={[GlobalStyles.globalStyles.safeContainer, {backgroundColor: ThemeParser.backgroundColor}]}>
                     <NavigationEvents onDidFocus={() => this._loadAsync()} />
-                    {this.AnimePageModal()}
+                    {this.state.animeScreenOpen ? this.AnimePageModal() : null}
 
                     <FlatList
                         showsVerticalScrollIndicator={false}

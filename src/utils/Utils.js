@@ -53,7 +53,7 @@ function renderRevealedFooter(handlePress) {
 }
 
 function getEpisode(title) {
-    return title ? title.split(' - ')[0].replace('Episode ', '').replace(' ', '') : 0;
+    return title ? title.split(' - ')[0].replace('Episode ', '').trim() : 0;
 }
 
 module.exports = {

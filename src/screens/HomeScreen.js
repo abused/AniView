@@ -34,7 +34,7 @@ export default class HomeScreen extends BaseAnimeScreen {
         if(this.state.animeLoaded) {
             return(
                 <SafeAreaView style={[GlobalStyles.globalStyles.safeContainer, {backgroundColor: ThemeParser.backgroundColor}]}>
-                    {this.AnimePageModal()}
+                    {this.state.animeScreenOpen ? this.AnimePageModal() : null}
 
                     <FlatList
                         showsVerticalScrollIndicator={false}

@@ -1,11 +1,12 @@
 const URL = 'https://www9.gogoanime.io/';
 const searchURL = URL + '/search.html?keyword=';
+const episodeTag = '-episode-';
 let options = {
     method: 'GET',
     headers: {'User-Agent': 'Mozilla/5.0'}
 };
 
-async function getAnimeLink(title, episode, secondCheck) {
+async function getAnimePage(title, originalTitle, tries) {
     let link = '';
     let ULList = [];
     let storingAnime = false;
@@ -34,24 +35,46 @@ async function getAnimeLink(title, episode, secondCheck) {
             }
         }
 
-        return link ? fetch(URL + link.replace('/category/', '') + '-episode-' + episode, options) : null;
-    }).then(handleResponse).then(data => {
+        if(link && ~link.toString().indexOf('/anime-list.html')) {
+            if (tries === 1) {
+                return getAnimePage(title.replace(' (TV)'), title.replace(' (TV)'), tries += 1);
+            } else if (tries === 2) {
+                return getAnimePage(originalTitle.split('!').join('').split('.').join(''), originalTitle, tries += 1);
+            } else if (tries === 3) {
+                return getAnimePage(originalTitle.split(' ').join(''), originalTitle, tries += 1);
+            }
+        }
+
+        return link;
+    });
+}
+
+async function getSingleEpisode(title, episode) {
+    let pageURL = await getAnimePage(title, title, 1);
+    return await getAnimeLink(URL + pageURL.replace('/category/', '') + episodeTag + episode);
+}
+
+async function getAnimeEpisodes(title, episodesCount) {
+    let pageURL = await getAnimePage(title, title, 1);
+
+    let episodes = {};
+
+    for (let i = 1; i < episodesCount+1; i++) {
+        episodes[i] = await getAnimeLink(URL + pageURL.replace('/category/', '') + episodeTag + i);
+    }
+
+    return episodes;
+}
+
+async function getAnimeLink(url) {
+    return fetch(url, options).then(handleResponse).then(data => {
         if(data) {
             if(data.toString().split('<div class="play-video">').length >= 2) {
-                module.exports.anime = 'http:' + data.toString().split('<div class="play-video">')[1].match(/"([^"]+)"/)[1].toString();
                 return 'http:' + data.toString().split('<div class="play-video">')[1].match(/"([^"]+)"/)[1].toString();
-            }else {
-                if(!secondCheck) {
-                    return getAnimeLink(title.replace('!', '').replace(':', '').replace('.', ''), episode, false);
-                }else {
-                    module.exports.anime = null;
-                    return null;
-                }
             }
-        }else {
-            module.exports.anime = null;
-            return null;
         }
+
+        return null;
     });
 }
 
@@ -66,8 +89,9 @@ function handleError(error) {
 }
 
 module.exports = {
+    getAnimePage: getAnimePage,
+    getSingleEpisode: getSingleEpisode,
+    getAnimeEpisodes: getAnimeEpisodes,
     getAnimeLink: getAnimeLink,
-    handleResponse: handleResponse,
-    handleError: handleError,
-    anime: ''
+    handleError: handleError
 };

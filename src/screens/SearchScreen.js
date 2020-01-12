@@ -22,7 +22,7 @@ export default class SearchScreen extends BaseAnimeScreen {
     render() {
         return(
             <SafeAreaView style={[GlobalStyles.globalStyles.safeContainer, {backgroundColor: ThemeParser.backgroundColor}]}>
-                {this.AnimePageModal()}
+                {this.state.animeScreenOpen ? this.AnimePageModal() : null}
                 <SearchBar placeholder='Search' returnKeyType='done' onChangeText={this.updateSearch} value={this.state.search} containerStyle={MainStyles.searchStyles.searchBar}/>
 
                 <FlatList

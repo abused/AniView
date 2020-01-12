@@ -67,7 +67,6 @@ async function getUnreadNotifications() {
     return await fetchQuery(notificationsQuery, await Utils.retrieveData('userToken'), {types: ['AIRING']}).then(handleResponse).then(handleData);
 
     function handleData(data) {
-        console.log(data);
         for (let i = 0; i < data.data.Viewer.unreadNotificationsCount; i++) {
             data.data.Page.notifications[i].unread = true;
         }
@@ -121,93 +120,17 @@ async function getSearchResults(string, list) {
 }
 
 async function getAnime(id) {
-    return await fetchQuery(getAnimeQuery, null, {animeId: id}).then(handleResponse);
-}
+    return fetchQuery(getAnimeQuery, null, {animeId: id}).then(handleResponse).then(async data => {
+        let episodes = data.data.Media.nextAiringEpisode ? data.data.Media.nextAiringEpisode.episode -1 : data.data.Media.episodes;
+        data.data.Media.pages = Math.ceil(episodes > 0 ? episodes / 12 : 0);
+        data.data.Media.streamingEpisodes = [];
 
-//Switched to Kitsu for now
-async function getAnimeByName(name) {
-    module.exports.watchingAnime.animeEpisodes = 0;
-    return await KitsuAniUtils.searchAnime(name).then(async data => {
-        let convertedData = {
-            id: data.data[0].id,
-            episodes: data.data[0].attributes.episodeCount,
-            description: data.data[0].attributes.synopsis,
-            genres: [],
-            title: {
-                english: data.data[0].attributes.titles.en,
-                romaji: data.data[0].attributes.titles.en_jp
-            },
-            coverImageValid: data.data[0].attributes.coverImage ? true : false,
-            bannerImage: data.data[0].attributes.coverImage ? data.data[0].attributes.coverImage.original : data.data[0].attributes.posterImage.large,
-            coverImage: {
-                large: data.data[0].attributes.posterImage.medium,
-                extraLarge:  data.data[0].attributes.posterImage.original,
-            },
-            streamingEpisodes: [],
-            nextAiringEpisode: null,
-            episodesLink: data.data[0].relationships.episodes.links.related,
-            genresLink: data.data[0].relationships.categories.links.related
-        };
-
-        let count = 1;
-        await fetchQuery(searchAnimeQuery, null, {search: convertedData.title.english ? convertedData.title.english : convertedData.title.romaji}).then(handleResponse).then(async aniData => {
-            await fetchQuery(getAnimeEpisodes, null, {animeId: aniData.data.Page.media[0].id}).then(handleResponse).then(episodeData => {
-                count = episodeData.data.Media.nextAiringEpisode ? episodeData.data.Media.nextAiringEpisode.episode - 1 : data.data[0].attributes.episodeCount;
-            }).catch(handleError);
-        }).catch(handleError);
-
-        if(count > 20) {
-            for (let i = 0; i < count / 20; i++) {
-                await KitsuAniUtils.fetchQuery(data.data[0].relationships.episodes.links.related + '?page[limit]=20&page[offset]=' + i * 20).then(handleResponse).then(episodeData => {
-                    episodeData.data.forEach(async episode => {
-                        await handleEpisodeData(convertedData.title.romaji, episode, convertedData.streamingEpisodes, convertedData.bannerImage, count);
-                    });
-                }).catch(handleError);
-            }
-        }else {
-            await KitsuAniUtils.fetchQuery(data.data[0].relationships.episodes.links.related + '?page[limit]=20').then(handleResponse).then(episodeData => {
-                episodeData.data.forEach(async episode => {
-                    await handleEpisodeData(convertedData.title.romaji, episode, convertedData.streamingEpisodes, convertedData.bannerImage, count);
-                });
-            }).catch(handleError);
+        for (let i = 1; i < episodes+1; i++) {
+            data.data.Media.streamingEpisodes.push('Episode ' + i.toString());
         }
 
-        await KitsuAniUtils.fetchQuery(data.data[0].relationships.categories.links.related).then(handleResponse).then(genreData => {
-            genreData.data.forEach(genre => {
-                convertedData.genres.push(genre.attributes.title);
-            });
-        }).catch(handleError);
-
-        return convertedData;
+        return data.data;
     });
-}
-
-async function handleEpisodeData(title, episode, list, banner, episodesCount) {
-    if (episode.attributes.titles.en_us) {
-        list.push({
-            title: 'Episode ' + episode.attributes.number + ' - ' + episode.attributes.titles.en_us,
-            thumbnail: episode.attributes.thumbnail.original
-        });
-        module.exports.animeEpisodes.push(await AnimeUtils.getAnimeLink(title, episode.attributes.number, false));
-    } else if (episode.attributes.airdate || episode.attributes.number < episodesCount) {
-        list.push({
-            title: 'Episode ' + episode.attributes.number + ' - Title Not Currently Available!',
-            thumbnail: banner
-        });
-        module.exports.animeEpisodes.push(await AnimeUtils.getAnimeLink(title, episode.attributes.number, false));
-    }
-}
-
-function getEpisodeLink(episode) {
-    let ep;
-    module.exports.animeEpisodes.forEach(link => {
-        if(episode.indexOf(link.split('+')[link.split('+').length - 1]) > -1) {
-            ep = link;
-            return link;
-        }
-    });
-
-    return ep;
 }
 
 function handleResponse(response) {
@@ -248,9 +171,7 @@ module.exports = {
     loadUserData: loadUserData,
     getSearchResults: getSearchResults,
     logout: logout,
-    //getAnime: getAnime,
-    getAnimeByName: getAnimeByName,
-    getEpisodeLink: getEpisodeLink,
+    getAnime: getAnime,
     handleError: handleError,
     loggedIn: false,
     userToken: '',
@@ -258,5 +179,5 @@ module.exports = {
     userAvatar: '',
     trendingAnime: [],
     watchingAnime: [],
-    animeEpisodes: []
+    episodeLinks: {}
 };

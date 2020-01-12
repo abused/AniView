@@ -7,13 +7,18 @@ import {
     ImageBackground,
     Image,
     ScrollView,
-    ActivityIndicator
+    ActivityIndicator,
+    Platform, Picker
 } from "react-native";
+import FontAwesome5Icon from "react-native-vector-icons/FontAwesome5";
+
+import {Button} from "react-native-elements";
 import Modal from 'react-native-modalbox';
 import ReadMore from "react-native-read-more-text";
 import {WebView} from "react-native-webview";
 import Accordion from 'react-native-collapsible/Accordion'
 import {AdMobBanner} from 'expo-ads-admob';
+import RNPickerSelect from 'react-native-picker-select';
 
 const MainStyles = require('../assets/styles/MainStyles');
 const ThemeParser = require('../utils/ThemeParser');
@@ -31,7 +36,10 @@ export default class BaseAnimeScreen extends React.Component {
         animeScreenOpen: false,
         anime: {},
         loading: false,
-        expanded: -1
+        expanded: -1,
+        page: 1,
+        pageLoaded: false,
+        pageEpisodes: {}
     };
 
     constructor(props) {
@@ -72,7 +80,7 @@ export default class BaseAnimeScreen extends React.Component {
     };
 
     _hideAnimePage = () => {
-        this.setState({animeScreenOpen: false, expanded: -1});
+        this.setState({animeScreenOpen: false, expanded: -1, page: 1, pageLoaded: false, pageEpisodes: {}});
         this.props.navigation.setParams({showBack: false, title: null});
     };
 
@@ -127,58 +135,130 @@ export default class BaseAnimeScreen extends React.Component {
     };
 
     openAnime = (id, title) => {
+        this.props.navigation.setParams({showBack: true, title: title});
         this.setState({animeScreenOpen: true, loading: true});
-        AniListAuth.getAnimeByName(title).then(data => {
+        this.openAnimePage(id).then(data => {
+            this.openEpisodePage(1);
+        });
+    };
+
+    openAnimePage = async (id) => {
+        return AniListAuth.getAnime(id).then(data => {
             this.setState({anime: data, loading: false});
-            this.props.navigation.setParams({showBack: true, title: title});
-        }).catch(AniListAuth.handleError);
+            return data;
+        });
+    };
 
-        /*
-        * Switched to Kitsu for now since AniList relies heavily on Crunchyroll
-        AniListAuth.getAnime(id).then(data => {
-            if(data.data.Media.streamingEpisodes.length <= 0) {
-                let episodeCount = data.data.Media.nextAiringEpisode ? data.data.Media.nextAiringEpisode.episode : data.data.Media.episodes + 1;
-                for (let i = 1; i < episodeCount; i++) {
-                    data.data.Media.streamingEpisodes.push({
-                        title: 'Episode ' + i.toString(),
-                        thumbnail: data.data.Media.bannerImage
-                    });
-                }
-            }else {
-                let episodeCount = data.data.Media.nextAiringEpisode ? data.data.Media.nextAiringEpisode.episode : data.data.Media.episodes + 1;
-                let ep = 1;
-                let episodeNumberArr = [];
-                let episodeData = [];
+    openEpisodePage = async (page) => {
+        if(page && page >= 1) {
+            this.setState({pageLoaded: false});
+            let pageEpisodes = {};
+            let episodes = this.state.anime.Media.nextAiringEpisode ? this.state.anime.Media.nextAiringEpisode.episode - 1 : this.state.anime.Media.episodes;
+            let episodeStart = ((page - 1) * 12) + 1;
+            let episodeEnd = episodeStart + 11;
 
-                data.data.Media.streamingEpisodes.forEach((episode, index, arr) => {
-                    if (!isNaN(Utils.getEpisode(episode.title))) {
-                        episodeNumberArr.push(Utils.getEpisode(episode.title));
-                        episodeData.push(ep);
-                        ep += 1;
-                    } else {
-                        arr.splice(index, 1);
-                    }
-                });
-                episodeNumberArr.sort((a, b) => a - b);
-                episodeData.sort((a, b) => a - b);
-
-                let isCountGreater = Utils.getEpisode(episodeNumberArr[episodeNumberArr.length - 1]) > episodeCount;
-                for (let i = 1; i < episodeCount; i++) {
-                    data.data.Media.streamingEpisodes.forEach((episode, index, arr) => {
-                        if (episode.title.indexOf('Episode ' + episodeNumberArr[i - 1]) > -1) {
-                            arr[index] = {
-                                title: isCountGreater ? 'Episode ' + episodeData[i - 1] + ' -' + episode.title.split('-')[1] : episode.title,
-                                thumbnail: episode.thumbnail
-                            };
-                        }
-                    });
-                }
+            for (let episode = episodeStart; episode <= (episodes >= episodeEnd ? episodeEnd : episodes); episode++) {
+                pageEpisodes[episode] = await AnimeUtils.getSingleEpisode(this.state.anime.Media.title.romaji, episode);
             }
 
-            this.setState({anime: data.data.Media, animeScreenOpen: true});
-            this.props.navigation.setParams({showBack: true, title: title});
-        }).catch(AniListAuth.handleError);
-        */
+            this.setState({pageEpisodes, pageLoaded: true, page});
+        }
+    };
+
+    AnimeEpisodesSection = () => {
+        if(this.state.pageLoaded) {
+            let pageSelections = [];
+            for (let i = 1; i <= this.state.anime.Media.pages; i++) {
+                pageSelections.push({label: 'Page: ' + i, value: i});
+            }
+
+            return(
+                <View>
+                    <Accordion
+                        sections={Object.keys(this.state.pageEpisodes)}
+                        touchableComponent={TouchableOpacity}
+                        expandMultiple={false}
+                        activeSections={this.state.expanded >= 0 ? [this.state.expanded] : []}
+                        renderHeader={(item) => {
+                            let episode = parseInt(item);
+                            return (
+                                <TouchableOpacity style={MainStyles.animeScreenStyles.episodeCard} onPress={() => this.setState({expanded: episode - 1})}>
+                                    <Text style={MainStyles.animeScreenStyles.animeEpisodeNumber}>{'Episode ' + item}</Text>
+                                </TouchableOpacity>
+                            );
+                        }}
+                        renderContent={(item) => {
+                            let episode = parseInt(item);
+
+                            if (this.state.pageEpisodes[episode]) {
+                                return (
+                                    <WebView
+                                        scrollEnabled={false}
+                                        source={{uri: this.state.pageEpisodes[episode]}}
+                                        onShouldStartLoadWithRequest={request => {
+                                            return request.url.startsWith('http://vidstreaming.io/streaming.php?id=');
+                                        }}
+                                        style={MainStyles.animeScreenStyles.animeWebView}
+                                    />
+                                );
+                            } else {
+                                return (
+                                    <View style={[MainStyles.animeScreenStyles.animeWebView, {
+                                        backgroundColor: 'black',
+                                        justifyContent: 'center',
+                                        alignItems: 'center'
+                                    }]}>
+                                        <ActivityIndicator size='large' color={ThemeParser.textColor}/>
+                                        <Text style={{color: ThemeParser.textColor, fontSize: 18}}>Video Is
+                                            Currently Processing!</Text>
+                                    </View>
+                                );
+                            }
+                        }}
+                        onChange={sections => {
+                            this.setState({expanded: sections})
+                        }}
+                    />
+
+                    {this.state.anime.Media.pages > 1 ?
+                        <View>
+                            <Text>{'\n'}</Text>
+                            <View style={{flexDirection: 'row', justifyContent: 'space-between', width: '80%', marginLeft: '10%', alignItems: 'center'}}>
+                                <Button title='Prev' onPress={() => {
+                                    if(this.state.page > 1) {
+                                        this.openEpisodePage(this.state.page - 1);
+                                    }
+                                }}/>
+
+                                <RNPickerSelect
+                                    placeholder={{}}
+                                    style={{...MainStyles.pickerSelectStyles, iconContainer: {padding: 4, paddingRight: 8}}}
+                                    value={this.state.page}
+                                    onValueChange={(value => this.openEpisodePage(value))}
+                                    items={pageSelections}
+                                    Icon={() => <FontAwesome5Icon color='white' name={'sort-down'} size={25}/>}
+                                />
+
+                                <Button title='Next' onPress={() => {
+                                    if(this.state.page < this.state.anime.Media.pages) {
+                                        this.openEpisodePage(this.state.page + 1);
+                                    }
+                                }}/>
+                            </View>
+                            <Text>{'\n'}</Text>
+                        </View>
+                        : null
+                    }
+                </View>
+            );
+        }else {
+            return (
+                <View style={{flex: 1, backgroundColor: ThemeParser.backgroundColor, justifyContent: 'center', alignItems: 'center'}}>
+                    <ActivityIndicator size='large' color={ThemeParser.textColor} />
+                    <Text style={[MainStyles.animeScreenStyles.heading, {color: ThemeParser.textColor}]}>Loading Episodes!</Text>
+                </View>
+            );
+        }
     };
 
     AnimePageModal = () => {
@@ -194,7 +274,7 @@ export default class BaseAnimeScreen extends React.Component {
           return(
               <Modal swipeToClose={false} isOpen={this.state.animeScreenOpen} onClosed={this._hideAnimePage}>
                   <ScrollView showsVerticalScrollIndicator={false} style={MainStyles.animeScreenStyles.animeContainer}>
-                      <ImageBackground imageStyle={{borderBottomColor: ThemeParser.redColor, borderBottomWidth: 2}} style={MainStyles.animeScreenStyles.bannerImage} source={{uri: this.state.anime.coverImage ? this.state.anime.coverImage.extraLarge : this.state.anime.bannerImage}} />
+                      <ImageBackground imageStyle={{borderBottomColor: ThemeParser.redColor, borderBottomWidth: 2}} style={MainStyles.animeScreenStyles.bannerImage} source={{uri: this.state.anime.Media.coverImage ? this.state.anime.Media.coverImage.extraLarge : this.state.anime.Media.bannerImage}} />
 
                       <View style={MainStyles.animeScreenStyles.contentContainer}>
                           <View style={{borderBottomColor: ThemeParser.textColor, borderBottomWidth: 2, marginBottom: 5}}>
@@ -202,7 +282,7 @@ export default class BaseAnimeScreen extends React.Component {
                           </View>
                           <FlatList
                               style={MainStyles.animeScreenStyles.genreContainer}
-                              data={this.state.anime.genres}
+                              data={this.state.anime.Media.genres}
                               numColumns={3}
                               renderItem={({item}) => {
                                   return(
@@ -218,57 +298,20 @@ export default class BaseAnimeScreen extends React.Component {
                               <Text style={MainStyles.animeScreenStyles.heading}>Description</Text>
                           </View>
                           <ReadMore numberOfLines={7} renderTruncatedFooter={Utils.renderTruncatedFooter} renderRevealedFooter={Utils.renderRevealedFooter}>
-                              <Text style={MainStyles.animeScreenStyles.description}>{this.state.anime.description}</Text>
+                              <Text style={MainStyles.animeScreenStyles.description}>{this.state.anime.Media.description}</Text>
                           </ReadMore>
 
-                          <Accordion
-                              sections={this.state.anime.streamingEpisodes}
-                              touchableComponent={TouchableOpacity}
-                              expandMultiple={false}
-                              activeSections={this.state.expanded >= 0 ? [this.state.expanded] : []}
-                              renderHeader={(item) => {
-                                  return (
-                                        <TouchableOpacity style={MainStyles.animeScreenStyles.episodeCard} onPress={() => {
-                                            this.setState({expanded: Utils.getEpisode(item.title) - 1});
-                                        }}>
+                          <View style={{borderBottomColor: ThemeParser.textColor, borderBottomWidth: 2, marginBottom: 5}}>
+                              <Text style={MainStyles.animeScreenStyles.heading}>Episodes</Text>
+                          </View>
 
-                                            <Image source={{uri: item.thumbnail}} style={MainStyles.animeScreenStyles.animeImage} />
-                                            {getAnimeTitleRender(item.title)}
-                                        </TouchableOpacity>
-                                  );
-                              }}
-                              renderContent={(item) => {
-                                  if(AnimeUtils.anime && AnimeUtils.anime !== '') {
-                                      return (
-                                          <WebView
-                                              scrollEnabled={false}
-                                              source={{ uri: AniListAuth.getEpisodeLink(Utils.getEpisode(item.title))}}
-                                              onShouldStartLoadWithRequest={request => {
-                                                  return request.url.startsWith('http://vidstreaming.io/streaming.php?id=');
-                                              }}
-                                              style={MainStyles.animeScreenStyles.animeWebView}
-                                          />
-                                      );
-                                  }else {
-                                      return (
-                                          <View style={[MainStyles.animeScreenStyles.animeWebView, {backgroundColor: 'black', justifyContent: 'center', alignItems: 'center'}]}>
-                                              <ActivityIndicator size='large' color={ThemeParser.textColor} />
-                                              <Text style={{color: ThemeParser.textColor, fontSize: 18}}>Video Is Currently Processing!</Text>
-                                          </View>
-                                      );
-                                  }
-                              }}
-                              onChange={sections => {
-                                  console.log(sections.toString());
-                                  this.setState({expanded: sections})
-                              }}
-                          />
+                          {this.AnimeEpisodesSection()}
                       </View>
 
                       <View style={{justifyContent: 'center', alignItems: 'center'}}>
                           <AdMobBanner
                               bannerSize='banner'
-                              adUnitID='ca-app-pub-6445224790923907/1898144067'
+                              adUnitID={Platform.OS === 'ios' ? 'ca-app-pub-6445224790923907/1898144067' : 'ca-app-pub-6445224790923907/8437263538'}
                               servePersonalizedAds
                               onDidFailToReceiveAdWithError={err => console.log(err)}
                           />
@@ -281,23 +324,6 @@ export default class BaseAnimeScreen extends React.Component {
 
     render() {
         return null;
-    }
-}
-
-function getAnimeTitleRender(title) {
-    if(title.split(' - ').length >= 2) {
-        return (
-            <View style={MainStyles.animeScreenStyles.animeEpisodeCard}>
-                <Text style={MainStyles.animeScreenStyles.animeEpisodeNumber}>{title.split(' - ')[0]}</Text>
-                <Text numberOfLines={3} style={MainStyles.animeScreenStyles.animeEpisodeTitle}>{title.split(' - ')[1]}</Text>
-            </View>
-        );
-    }else {
-        return (
-            <View style={MainStyles.animeScreenStyles.animeEpisodeCard}>
-                <Text style={MainStyles.animeScreenStyles.animeEpisodeNumber}>{title}</Text>
-            </View>
-        );
     }
 }
 
