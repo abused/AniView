@@ -334,10 +334,10 @@ const pickerSelectStyles = StyleSheet.create({
 });
 
 module.exports = {
-    homeStyles: homeStyles,
-    listStyles: listStyles,
-    searchStyles: searchStyles,
-    settingsStyles: settingsStyles,
-    animeScreenStyles: animeScreenStyles,
-    pickerSelectStyles: pickerSelectStyles
+    homeStyles,
+    listStyles,
+    searchStyles,
+    settingsStyles,
+    animeScreenStyles,
+    pickerSelectStyles
 };

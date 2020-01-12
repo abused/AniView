@@ -68,6 +68,6 @@ const WelcomeStack = createStackNavigator(
 );
 
 module.exports = {
-    MainStack: MainStack,
-    WelcomeStack: WelcomeStack,
+    MainStack,
+    WelcomeStack
 };

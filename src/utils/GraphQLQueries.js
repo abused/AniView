@@ -131,11 +131,11 @@ query($animeId: Int) {
 `;
 
 module.exports = {
-  loginQuery: loginQuery,
-  notificationsQuery: notificationsQuery,
-  trendingAnimeQuery: trendingAnimeQuery,
-  watchingAnimeQuery: watchingAnimeQuery,
-  getAnimeQuery: getAnimeQuery,
-  searchAnimeQuery: searchAnimeQuery,
-  getAnimeEpisodes: getAnimeEpisodes
+  loginQuery,
+  notificationsQuery,
+  trendingAnimeQuery,
+  watchingAnimeQuery,
+  getAnimeQuery,
+  searchAnimeQuery,
+  getAnimeEpisodes
 };

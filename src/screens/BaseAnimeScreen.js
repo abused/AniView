@@ -8,7 +8,7 @@ import {
     Image,
     ScrollView,
     ActivityIndicator,
-    Platform, Picker
+    Platform
 } from "react-native";
 import FontAwesome5Icon from "react-native-vector-icons/FontAwesome5";
 
@@ -29,17 +29,17 @@ const AnimeUtils = require('../utils/AnimeUtils');
 export default class BaseAnimeScreen extends React.Component {
 
     state = {
-        animeLoaded: false,
-        refreshing: false,
-        search: '',
-        results: [],
         animeScreenOpen: false,
-        anime: {},
+        animeLoaded: false,
+        pageLoaded: false,
+        refreshing: false,
         loading: false,
+        pageEpisodes: {},
+        results: [],
+        anime: {},
         expanded: -1,
         page: 1,
-        pageLoaded: false,
-        pageEpisodes: {}
+        search: ''
     };
 
     constructor(props) {
@@ -150,15 +150,17 @@ export default class BaseAnimeScreen extends React.Component {
     };
 
     openEpisodePage = async (page) => {
+        let {anime} = this.state;
+
         if(page && page >= 1) {
             this.setState({pageLoaded: false});
             let pageEpisodes = {};
-            let episodes = this.state.anime.Media.nextAiringEpisode ? this.state.anime.Media.nextAiringEpisode.episode - 1 : this.state.anime.Media.episodes;
+            let episodes = anime.Media.nextAiringEpisode ? anime.Media.nextAiringEpisode.episode - 1 : anime.Media.episodes;
             let episodeStart = ((page - 1) * 12) + 1;
             let episodeEnd = episodeStart + 11;
 
             for (let episode = episodeStart; episode <= (episodes >= episodeEnd ? episodeEnd : episodes); episode++) {
-                pageEpisodes[episode] = await AnimeUtils.getSingleEpisode(this.state.anime.Media.title.romaji, episode);
+                pageEpisodes[episode] = await AnimeUtils.getSingleEpisode(anime.Media.title.romaji, episode);
             }
 
             this.setState({pageEpisodes, pageLoaded: true, page});
@@ -166,19 +168,21 @@ export default class BaseAnimeScreen extends React.Component {
     };
 
     AnimeEpisodesSection = () => {
-        if(this.state.pageLoaded) {
+        let {pageLoaded, anime, pageEpisodes, expanded, page} = this.state;
+
+        if(pageLoaded) {
             let pageSelections = [];
-            for (let i = 1; i <= this.state.anime.Media.pages; i++) {
+            for (let i = 1; i <= anime.Media.pages; i++) {
                 pageSelections.push({label: 'Page: ' + i, value: i});
             }
 
             return(
                 <View>
                     <Accordion
-                        sections={Object.keys(this.state.pageEpisodes)}
+                        sections={Object.keys(pageEpisodes)}
                         touchableComponent={TouchableOpacity}
                         expandMultiple={false}
-                        activeSections={this.state.expanded >= 0 ? [this.state.expanded] : []}
+                        activeSections={expanded >= 0 ? [expanded] : []}
                         renderHeader={(item) => {
                             let episode = parseInt(item);
                             return (
@@ -190,11 +194,11 @@ export default class BaseAnimeScreen extends React.Component {
                         renderContent={(item) => {
                             let episode = parseInt(item);
 
-                            if (this.state.pageEpisodes[episode]) {
+                            if (pageEpisodes[episode]) {
                                 return (
                                     <WebView
                                         scrollEnabled={false}
-                                        source={{uri: this.state.pageEpisodes[episode]}}
+                                        source={{uri: pageEpisodes[episode]}}
                                         onShouldStartLoadWithRequest={request => {
                                             return request.url.startsWith('http://vidstreaming.io/streaming.php?id=');
                                         }}
@@ -220,28 +224,28 @@ export default class BaseAnimeScreen extends React.Component {
                         }}
                     />
 
-                    {this.state.anime.Media.pages > 1 ?
+                    {anime.Media.pages > 1 ?
                         <View>
                             <Text>{'\n'}</Text>
                             <View style={{flexDirection: 'row', justifyContent: 'space-between', width: '80%', marginLeft: '10%', alignItems: 'center'}}>
                                 <Button title='Prev' onPress={() => {
-                                    if(this.state.page > 1) {
-                                        this.openEpisodePage(this.state.page - 1);
+                                    if(page > 1) {
+                                        this.openEpisodePage(page - 1);
                                     }
                                 }}/>
 
                                 <RNPickerSelect
                                     placeholder={{}}
                                     style={{...MainStyles.pickerSelectStyles, iconContainer: {padding: 4, paddingRight: 8}}}
-                                    value={this.state.page}
+                                    value={page}
                                     onValueChange={(value => this.openEpisodePage(value))}
                                     items={pageSelections}
                                     Icon={() => <FontAwesome5Icon color='white' name={'sort-down'} size={25}/>}
                                 />
 
                                 <Button title='Next' onPress={() => {
-                                    if(this.state.page < this.state.anime.Media.pages) {
-                                        this.openEpisodePage(this.state.page + 1);
+                                    if(page < anime.Media.pages) {
+                                        this.openEpisodePage(page + 1);
                                     }
                                 }}/>
                             </View>
@@ -262,9 +266,11 @@ export default class BaseAnimeScreen extends React.Component {
     };
 
     AnimePageModal = () => {
-        if(this.state.loading) {
+        let {loading, animeScreenOpen, anime} = this.state;
+
+        if(loading) {
             return(
-                <Modal swipeToClose={false} isOpen={this.state.animeScreenOpen} onClosed={this._hideAnimePage}>
+                <Modal swipeToClose={false} isOpen={animeScreenOpen} onClosed={this._hideAnimePage}>
                     <View style={{flex: 1, backgroundColor: ThemeParser.backgroundColor, justifyContent: 'center', alignItems: 'center'}}>
                         <ActivityIndicator size='large' color={ThemeParser.textColor} />
                     </View>
@@ -272,9 +278,9 @@ export default class BaseAnimeScreen extends React.Component {
             );
         }else {
           return(
-              <Modal swipeToClose={false} isOpen={this.state.animeScreenOpen} onClosed={this._hideAnimePage}>
+              <Modal swipeToClose={false} isOpen={animeScreenOpen} onClosed={this._hideAnimePage}>
                   <ScrollView showsVerticalScrollIndicator={false} style={MainStyles.animeScreenStyles.animeContainer}>
-                      <ImageBackground imageStyle={{borderBottomColor: ThemeParser.redColor, borderBottomWidth: 2}} style={MainStyles.animeScreenStyles.bannerImage} source={{uri: this.state.anime.Media.coverImage ? this.state.anime.Media.coverImage.extraLarge : this.state.anime.Media.bannerImage}} />
+                      <ImageBackground imageStyle={{borderBottomColor: ThemeParser.redColor, borderBottomWidth: 2}} style={MainStyles.animeScreenStyles.bannerImage} source={{uri: anime.Media.coverImage ? anime.Media.coverImage.extraLarge : anime.Media.bannerImage}} />
 
                       <View style={MainStyles.animeScreenStyles.contentContainer}>
                           <View style={{borderBottomColor: ThemeParser.textColor, borderBottomWidth: 2, marginBottom: 5}}>
@@ -282,7 +288,7 @@ export default class BaseAnimeScreen extends React.Component {
                           </View>
                           <FlatList
                               style={MainStyles.animeScreenStyles.genreContainer}
-                              data={this.state.anime.Media.genres}
+                              data={anime.Media.genres}
                               numColumns={3}
                               renderItem={({item}) => {
                                   return(
@@ -298,7 +304,7 @@ export default class BaseAnimeScreen extends React.Component {
                               <Text style={MainStyles.animeScreenStyles.heading}>Description</Text>
                           </View>
                           <ReadMore numberOfLines={7} renderTruncatedFooter={Utils.renderTruncatedFooter} renderRevealedFooter={Utils.renderRevealedFooter}>
-                              <Text style={MainStyles.animeScreenStyles.description}>{this.state.anime.Media.description}</Text>
+                              <Text style={MainStyles.animeScreenStyles.description}>{anime.Media.description}</Text>
                           </ReadMore>
 
                           <View style={{borderBottomColor: ThemeParser.textColor, borderBottomWidth: 2, marginBottom: 5}}>

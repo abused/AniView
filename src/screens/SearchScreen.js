@@ -20,14 +20,16 @@ export default class SearchScreen extends BaseAnimeScreen {
     });
 
     render() {
+        let {animeScreenOpen, search, results, refreshing} = this.state;
+
         return(
             <SafeAreaView style={[GlobalStyles.globalStyles.safeContainer, {backgroundColor: ThemeParser.backgroundColor}]}>
-                {this.state.animeScreenOpen ? this.AnimePageModal() : null}
-                <SearchBar placeholder='Search' returnKeyType='done' onChangeText={this.updateSearch} value={this.state.search} containerStyle={MainStyles.searchStyles.searchBar}/>
+                {animeScreenOpen ? this.AnimePageModal() : null}
+                <SearchBar placeholder='Search' returnKeyType='done' onChangeText={this.updateSearch} value={search} containerStyle={MainStyles.searchStyles.searchBar}/>
 
                 <FlatList
                     style={{flex: 1}}
-                    data={this.state.results}
+                    data={results}
                     numColumns={1}
                     renderItem={({item}) => this.SearchItem(
                         item.id,
@@ -38,7 +40,7 @@ export default class SearchScreen extends BaseAnimeScreen {
                     keyExtractor={(item) => item.id.toString()}
                     refreshControl={<RefreshControl title='Pull to refresh' titleColor={ThemeParser.textColor}
                                                     tintColor={ThemeParser.textColor}
-                                                    refreshing={this.state.refreshing}
+                                                    refreshing={refreshing}
                                                     onRefresh={this.onRefresh}/>}
                 />
             </SafeAreaView>

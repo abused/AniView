@@ -23,8 +23,8 @@ function loadTheme(theme) {
 }
 
 module.exports = {
-    themes: themes,
-    loadTheme: loadTheme,
+    themes,
+    loadTheme,
     backgroundColor: themes.DARK.backgroundColor,
     navBackgroundColor: themes.DARK.navBackgroundColor,
     blueColor: themes.DARK.blueColor,

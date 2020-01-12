@@ -28,7 +28,7 @@ function handleResponse(response) {
 }
 
 module.exports = {
-    searchAnime: searchAnime,
-    getAnime: getAnime,
-    fetchQuery: fetchQuery
+    searchAnime,
+    getAnime,
+    fetchQuery
 };

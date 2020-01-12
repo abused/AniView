@@ -35,6 +35,8 @@ export default class MyAnimeListScreen extends BaseAnimeScreen {
     });
 
     render() {
+        let {token, animeLoaded, animeScreenOpen, refreshing} = this.state;
+
         if(!AniListAuth.loggedIn) {
             return (
                 <SafeAreaView keyboardShouldPersistTaps='always' forceInset={{ top: 'never', bottom: 'always'}} style={GlobalStyles.globalStyles.safeContainer}>
@@ -65,7 +67,7 @@ export default class MyAnimeListScreen extends BaseAnimeScreen {
                                         </TouchableOpacity>
 
                                         <TouchableOpacity style={[GlobalStyles.globalStyles.ovalButton, {backgroundColor: ThemeParser.redColor}]} onPress={() => {
-                                            AniListAuth.login(this.state.token).then(value => {
+                                            AniListAuth.login(token).then(value => {
                                                 this._loadAsync();
                                             });
                                         }}>
@@ -80,11 +82,11 @@ export default class MyAnimeListScreen extends BaseAnimeScreen {
             );
         }
 
-        if(this.state.animeLoaded) {
+        if(animeLoaded) {
             return (
                 <SafeAreaView style={[GlobalStyles.globalStyles.safeContainer, {backgroundColor: ThemeParser.backgroundColor}]}>
                     <NavigationEvents onDidFocus={() => this._loadAsync()} />
-                    {this.state.animeScreenOpen ? this.AnimePageModal() : null}
+                    {animeScreenOpen ? this.AnimePageModal() : null}
 
                     <FlatList
                         showsVerticalScrollIndicator={false}
@@ -100,7 +102,7 @@ export default class MyAnimeListScreen extends BaseAnimeScreen {
                         keyExtractor={(item) => item.media.id.toString()}
                         refreshControl={<RefreshControl title='Pull to refresh' titleColor={ThemeParser.textColor}
                                                         tintColor={ThemeParser.textColor}
-                                                        refreshing={this.state.refreshing}
+                                                        refreshing={refreshing}
                                                         onRefresh={this.onRefresh}/>}
                     />
                 </SafeAreaView>

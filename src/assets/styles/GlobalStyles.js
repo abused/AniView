@@ -60,6 +60,4 @@ const globalStyles = StyleSheet.create({
     }
 });
 
-module.exports = {
-    globalStyles: globalStyles
-};
+module.exports = {globalStyles};

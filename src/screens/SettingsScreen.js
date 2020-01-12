@@ -40,10 +40,13 @@ export default class SettingsScreen extends React.Component {
     };
 
     setNotifications = () => {
-        Utils.storeData('notifications', (!this.state.notifications).toString()).then(() => this.setState({notifications: !this.state.notifications}));
+        let {notifications} = this.state;
+        Utils.storeData('notifications', (!notifications).toString()).then(() => this.setState({notifications: !notifications}));
     };
 
     render() {
+        let {aboutVisible, displayThemes, notifications} = this.state;
+
         return(
             <SafeAreaView style={[GlobalStyles.globalStyles.safeContainer, {backgroundColor: ThemeParser.backgroundColor}]}>
                 <NavigationEvents onDidFocus={() => this.setRefreshing(false)} />
@@ -52,7 +55,7 @@ export default class SettingsScreen extends React.Component {
                     style={{backgroundColor: ThemeParser.backgroundColor, height: '85%', paddingLeft: '2%', paddingRight: '2%'}}
                     position={'bottom'}
                     swipeArea={Info.WINDOW_HEIGHT * 0.5}
-                    isOpen={this.state.aboutVisible}
+                    isOpen={aboutVisible}
                     onClosed={() => this.setState({aboutVisible: false})}
                 >
                     <ScrollView showsVerticalScrollIndicator={false}>
@@ -71,9 +74,9 @@ export default class SettingsScreen extends React.Component {
                     </View>
 
 
-                    <View style={MainStyles.settingsStyles.option} onPress={() => this.setState({displayThemes: !this.state.displayThemes})}>
+                    <View style={MainStyles.settingsStyles.option} onPress={() => this.setState({displayThemes: !displayThemes})}>
                         <Text style={MainStyles.settingsStyles.optionText}><FontAwesome5Icon name={'bell'} size={20}/>   Notifications</Text>
-                        <Switch style={{position: 'absolute', right: '2.5%'}} onValueChange={this.setNotifications} value={this.state.notifications} onTintColor={ThemeParser.blueColor} tintColor={ThemeParser.textColor}/>
+                        <Switch style={{position: 'absolute', right: '2.5%'}} onValueChange={this.setNotifications} value={notifications} onTintColor={ThemeParser.blueColor} tintColor={ThemeParser.textColor}/>
                     </View>
 
                     <View style={MainStyles.settingsStyles.category}>
@@ -105,29 +108,3 @@ export default class SettingsScreen extends React.Component {
         );
     }
 }
-
-/*
-                    <TouchableOpacity style={MainStyles.settingsStyles.option} onPress={() => this.setState({displayThemes: !this.state.displayThemes})}>
-                        <Text style={MainStyles.settingsStyles.optionText}><FontAwesome5Icon name={'palette'} size={20}/>   Theme</Text>
-                    </TouchableOpacity>
-
-                    <Collapsible collapsed={!this.state.displayThemes}>
-                        <View style={MainStyles.settingsStyles.themeView}>
-                            <TouchableOpacity style={[MainStyles.settingsStyles.themeOption, {backgroundColor: ThemeParser.themes.DARK.navBackgroundColor}]} onPress={() => {
-                                ThemeParser.loadTheme(ThemeParser.themes.DARK);
-                                clearThemeCache();
-                                this.setRefreshing(false);
-                            }}>
-                                <Text style={[MainStyles.settingsStyles.specialText, {color: ThemeParser.themes.DARK.textColor}]}>Dark</Text>
-                            </TouchableOpacity>
-
-                            <TouchableOpacity style={[MainStyles.settingsStyles.themeOption, {backgroundColor: ThemeParser.themes.LIGHT.animeTitleBackgroundColor}]} onPress={() => {
-                                ThemeParser.loadTheme(ThemeParser.themes.LIGHT);
-                                clearThemeCache();
-                                this.setRefreshing(false);
-                            }}>
-                                <Text style={[MainStyles.settingsStyles.specialText, {color: ThemeParser.themes.LIGHT.textColor}]}>Light</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </Collapsible>
-                     */

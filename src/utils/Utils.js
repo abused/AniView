@@ -57,11 +57,11 @@ function getEpisode(title) {
 }
 
 module.exports = {
-    storeData: storeData,
-    retrieveData: retrieveData,
-    deleteData: deleteData,
-    secondsTimeFormat: secondsTimeFormat,
-    renderTruncatedFooter: renderTruncatedFooter,
-    renderRevealedFooter: renderRevealedFooter,
-    getEpisode: getEpisode
+    storeData,
+    retrieveData,
+    deleteData,
+    secondsTimeFormat,
+    renderTruncatedFooter,
+    renderRevealedFooter,
+    getEpisode
 };

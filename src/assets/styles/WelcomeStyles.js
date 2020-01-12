@@ -76,6 +76,6 @@ const loginStyles = StyleSheet.create({
 });
 
 module.exports = {
-    welcomeStyles: welcomeStyles,
-    loginStyles: loginStyles
+    welcomeStyles,
+    loginStyles
 };

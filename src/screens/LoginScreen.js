@@ -20,6 +20,8 @@ export default class LoginScreen extends React.Component {
     };
 
     render() {
+        let {token} = this.state;
+
         return(
             <ImageBackground source={Info.BACKGROUND} style={WelcomeStyles.loginStyles.background}>
                 <View style={GlobalStyles.globalStyles.container}>
@@ -47,7 +49,7 @@ export default class LoginScreen extends React.Component {
                                 </TouchableOpacity>
 
                                 <TouchableOpacity style={[GlobalStyles.globalStyles.halfButton, {backgroundColor: ThemeParser.redColor}]} onPress={() => {
-                                    AniListAuth.login(this.state.token).then(value => {
+                                    AniListAuth.login(token).then(value => {
                                         if(AniListAuth.loggedIn) {
                                             Utils.storeData('showWelcome', 'false').then(value => {
                                                 this.props.navigation.navigate('Main');

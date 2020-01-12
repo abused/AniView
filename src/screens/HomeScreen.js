@@ -19,11 +19,10 @@ export default class HomeScreen extends BaseAnimeScreen {
     static navigationOptions = ({navigation}) => ({
         title: <Text style={GlobalStyles.globalStyles.headerText}>{navigation.getParam('title') ? navigation.getParam('title') : 'Popular Anime'}</Text>,
         headerStyle: GlobalStyles.globalStyles.header,
-        headerLeft: () => ( navigation.getParam('showBack') ?
+        headerLeft: () => (navigation.getParam('showBack') ?
             <TouchableOpacity style={MainStyles.animeScreenStyles.closeButton} onPress={navigation.getParam('hideAnimePage')}>
                 <Text><FontAwesome5Icon style={MainStyles.settingsStyles.closeButtonIcon} color={ThemeParser.redColor} name={'arrow-left'} size={28}/></Text>
-            </TouchableOpacity> : null
-        )
+            </TouchableOpacity> : null)
     });
 
     constructor(props) {
@@ -31,10 +30,12 @@ export default class HomeScreen extends BaseAnimeScreen {
     }
 
     render() {
-        if(this.state.animeLoaded) {
+        let {animeLoaded, animeScreenOpen, refreshing} = this.state;
+
+        if(animeLoaded) {
             return(
                 <SafeAreaView style={[GlobalStyles.globalStyles.safeContainer, {backgroundColor: ThemeParser.backgroundColor}]}>
-                    {this.state.animeScreenOpen ? this.AnimePageModal() : null}
+                    {animeScreenOpen ? this.AnimePageModal() : null}
 
                     <FlatList
                         showsVerticalScrollIndicator={false}
@@ -43,7 +44,7 @@ export default class HomeScreen extends BaseAnimeScreen {
                         numColumns={3}
                         renderItem={({item}) => this.HomeItem(item.id, item.title.english !== null ? item.title.english : item.title.romaji, item.coverImage.large)}
                         keyExtractor={(item) => item.id.toString()}
-                        refreshControl={<RefreshControl title='Pull to refresh' titleColor={ThemeParser.textColor} tintColor={ThemeParser.textColor} refreshing={this.state.refreshing} onRefresh={this.onRefresh}/>}
+                        refreshControl={<RefreshControl title='Pull to refresh' titleColor={ThemeParser.textColor} tintColor={ThemeParser.textColor} refreshing={refreshing} onRefresh={this.onRefresh}/>}
                     />
                 </SafeAreaView>
             );

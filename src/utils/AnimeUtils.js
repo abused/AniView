@@ -89,9 +89,9 @@ function handleError(error) {
 }
 
 module.exports = {
-    getAnimePage: getAnimePage,
-    getSingleEpisode: getSingleEpisode,
-    getAnimeEpisodes: getAnimeEpisodes,
-    getAnimeLink: getAnimeLink,
-    handleError: handleError
+    getAnimePage,
+    getSingleEpisode,
+    getAnimeEpisodes,
+    getAnimeLink,
+    handleError
 };
