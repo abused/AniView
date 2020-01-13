@@ -1,6 +1,6 @@
 //TODO SWITCH BACK TO ANILIST ONCE THEY MOVE AWAY FROM CRUNCHYROLL!
 import {Alert, Linking} from "react-native";
-import {loginQuery, notificationsQuery, trendingAnimeQuery, watchingAnimeQuery, searchAnimeQuery, getAnimeQuery, getAnimeEpisodes} from './GraphQLQueries';
+import {loginQuery, notificationsQuery, trendingAnimeQuery, watchingAnimeQuery, searchAnimeQuery, getAnimeQuery, updateProgressQuery, updateStatusQuery, getProgressQuery} from './GraphQLQueries';
 const Utils = require('./Utils');
 const KitsuAniUtils = require('./KitsuAniUtils');
 const AnimeUtils = require('./AnimeUtils');
@@ -120,7 +120,7 @@ async function getSearchResults(string, list) {
 }
 
 async function getAnime(id) {
-    return fetchQuery(getAnimeQuery, null, {animeId: id}).then(handleResponse).then(async data => {
+    return fetchQuery(getAnimeQuery, null, {animeId: id}).then(handleResponse).then(data => {
         let episodes = data.data.Media.nextAiringEpisode ? data.data.Media.nextAiringEpisode.episode -1 : data.data.Media.episodes;
         data.data.Media.pages = Math.ceil(episodes > 0 ? episodes / 12 : 0);
         data.data.Media.streamingEpisodes = [];
@@ -131,6 +131,14 @@ async function getAnime(id) {
 
         return data.data;
     });
+}
+
+async function updateStatus(id, status) {
+    return fetchQuery(updateStatusQuery, module.exports.userToken, {listId: id, status}).then(handleResponse).catch(console.error);
+}
+
+function updateProgress(id, progress) {
+    return fetchQuery(updateProgressQuery, module.exports.userToken, {listId: id, progress}).then(handleResponse).catch(console.error);
 }
 
 function handleResponse(response) {
@@ -160,6 +168,8 @@ function handleError(error) {
 }
 
 module.exports = {
+    updateStatus,
+    updateProgress,
     clientID,
     authURL,
     graphURL,
@@ -173,6 +183,8 @@ module.exports = {
     logout,
     getAnime,
     handleError,
+    handleResponse,
+    fetchQuery,
     loggedIn: false,
     userToken: '',
     userName: '',

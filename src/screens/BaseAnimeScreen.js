@@ -19,12 +19,15 @@ import {WebView} from "react-native-webview";
 import Accordion from 'react-native-collapsible/Accordion'
 import {AdMobBanner} from 'expo-ads-admob';
 import RNPickerSelect from 'react-native-picker-select';
+import {getProgressQuery} from "../utils/GraphQLQueries";
 
 const MainStyles = require('../assets/styles/MainStyles');
 const ThemeParser = require('../utils/ThemeParser');
 const AniListAuth = require('../utils/AniListAuth');
 const Utils = require('../utils/Utils');
 const AnimeUtils = require('../utils/AnimeUtils');
+
+let statuses = [{label: 'WATCHING', value: 'CURRENT'}, {label: 'PLANNING', value: 'PLANNING'}, {label: 'COMPLETED', value: 'COMPLETED'}, {label: 'DROPPED', value: 'DROPPED'}, {label: 'PAUSED', value: 'PAUSED'}, {label: 'RE-WATCHING', value: 'RE-WATCHING'}];
 
 export default class BaseAnimeScreen extends React.Component {
 
@@ -39,7 +42,9 @@ export default class BaseAnimeScreen extends React.Component {
         anime: {},
         expanded: -1,
         page: 1,
-        search: ''
+        search: '',
+        status: '',
+        progress: ''
     };
 
     constructor(props) {
@@ -138,6 +143,10 @@ export default class BaseAnimeScreen extends React.Component {
         this.props.navigation.setParams({showBack: true, title: title});
         this.setState({animeScreenOpen: true, loading: true});
         this.openAnimePage(id).then(data => {
+            AniListAuth.fetchQuery(getProgressQuery, null, {animeId: id, user: AniListAuth.loggedIn? AniListAuth.userID: 0}).then(res => res.ok ? AniListAuth.handleResponse(res) : null).then(data => {
+                this.setState({status: data ? data.data.MediaList.status : '', progress: data ? data.data.MediaList.progress : 0})
+            });
+
             this.openEpisodePage(1);
         });
     };
@@ -236,7 +245,7 @@ export default class BaseAnimeScreen extends React.Component {
 
                                 <RNPickerSelect
                                     placeholder={{}}
-                                    style={{...MainStyles.pickerSelectStyles, iconContainer: {padding: 4, paddingRight: 8}}}
+                                    style={{...MainStyles.pagePickerSelectStyles, iconContainer: {padding: 4, paddingRight: 8}}}
                                     value={page}
                                     onValueChange={(value => this.openEpisodePage(value))}
                                     items={pageSelections}
@@ -277,34 +286,70 @@ export default class BaseAnimeScreen extends React.Component {
                 </Modal>
             );
         }else {
-          return(
+            let episodes = anime.Media.nextAiringEpisode ? anime.Media.nextAiringEpisode.episode - 1 : anime.Media.episodes;
+
+            return(
               <Modal swipeToClose={false} isOpen={animeScreenOpen} onClosed={this._hideAnimePage}>
                   <ScrollView showsVerticalScrollIndicator={false} style={MainStyles.animeScreenStyles.animeContainer}>
-                      <ImageBackground imageStyle={{borderBottomColor: ThemeParser.redColor, borderBottomWidth: 2}} style={MainStyles.animeScreenStyles.bannerImage} source={{uri: anime.Media.coverImage ? anime.Media.coverImage.extraLarge : anime.Media.bannerImage}} />
+                      <View style={MainStyles.animeScreenStyles.infoContainer}>
+                          <Image source={{uri: anime.Media.coverImage ? anime.Media.coverImage.extraLarge : anime.Media.bannerImage}} style={MainStyles.animeScreenStyles.bannerImage} />
+
+                          <View>
+                              <View style={MainStyles.animeScreenStyles.animeTitle}>
+                                  <Text style={{color: ThemeParser.textColor, fontWeight: 'bold', fontSize: 16}}>{anime.Media.title.english}</Text>
+                              </View>
+
+                              <View style={MainStyles.animeScreenStyles.info}>
+                                  <View style={MainStyles.animeScreenStyles.infoColumn}>
+                                      <Text>
+                                          <Text style={MainStyles.animeScreenStyles.infoTitle}>Type</Text>
+                                          {'\n'}
+                                          <Text style={MainStyles.animeScreenStyles.infoText}>{anime.Media.format}</Text>
+                                      </Text>
+
+                                      <Text>
+                                          <Text style={MainStyles.animeScreenStyles.infoTitle}>Episodes</Text>
+                                          {'\n'}
+                                          <Text style={MainStyles.animeScreenStyles.infoText}>{episodes}</Text>
+                                      </Text>
+
+                                      <Text>
+                                          <Text style={MainStyles.animeScreenStyles.infoTitle}>Season</Text>
+                                          {'\n'}
+                                          <Text style={MainStyles.animeScreenStyles.infoText}>{anime.Media.season + ' ' + anime.Media.seasonYear}</Text>
+                                      </Text>
+                                  </View>
+
+                                  <View style={MainStyles.animeScreenStyles.infoColumn}>
+                                      <Text>
+                                          <Text style={MainStyles.animeScreenStyles.infoTitle}>Genres</Text>
+                                          {'\n'}
+                                          <Text style={MainStyles.animeScreenStyles.infoText}>{anime.Media.genres.join(', ')}</Text>
+                                      </Text>
+                                  </View>
+
+                                  <View style={MainStyles.animeScreenStyles.infoColumn}>
+                                      <Text>
+                                          <Text style={MainStyles.animeScreenStyles.infoTitle}>Status</Text>
+                                          {'\n'}
+                                          <Text style={MainStyles.animeScreenStyles.infoText}>{anime.Media.status}</Text>
+                                      </Text>
+
+                                      <Text>
+                                          <Text style={MainStyles.animeScreenStyles.infoTitle}>Score</Text>
+                                          {'\n'}
+                                          <Text style={MainStyles.animeScreenStyles.infoText}>{anime.Media.averageScore + '%'}</Text>
+                                      </Text>
+                                  </View>
+                              </View>
+                          </View>
+                      </View>
+
+                      {this.AnimePageMedia()}
 
                       <View style={MainStyles.animeScreenStyles.contentContainer}>
-                          <View style={{borderBottomColor: ThemeParser.textColor, borderBottomWidth: 2, marginBottom: 5}}>
-                              <Text style={MainStyles.animeScreenStyles.heading}>Genres</Text>
-                          </View>
-                          <FlatList
-                              style={MainStyles.animeScreenStyles.genreContainer}
-                              data={anime.Media.genres}
-                              numColumns={3}
-                              renderItem={({item}) => {
-                                  return(
-                                      <View style={MainStyles.animeScreenStyles.genreView}>
-                                          <Text style={MainStyles.animeScreenStyles.genre}>{item}</Text>
-                                      </View>
-                                  );
-                              }}
-                              keyExtractor={(item) => item.toString()}
-                          />
-
-                          <View style={{borderBottomColor: ThemeParser.textColor, borderBottomWidth: 2, marginBottom: 10}}>
-                              <Text style={MainStyles.animeScreenStyles.heading}>Description</Text>
-                          </View>
-                          <ReadMore numberOfLines={7} renderTruncatedFooter={Utils.renderTruncatedFooter} renderRevealedFooter={Utils.renderRevealedFooter}>
-                              <Text style={MainStyles.animeScreenStyles.description}>{anime.Media.description}</Text>
+                          <ReadMore numberOfLines={6} renderTruncatedFooter={Utils.renderTruncatedFooter} renderRevealedFooter={Utils.renderRevealedFooter}>
+                              <Text style={MainStyles.animeScreenStyles.description}>{anime.Media.description.replace(/(<([^>]+)>)/ig, '')}</Text>
                           </ReadMore>
 
                           <View style={{borderBottomColor: ThemeParser.textColor, borderBottomWidth: 2, marginBottom: 5}}>
@@ -326,6 +371,42 @@ export default class BaseAnimeScreen extends React.Component {
               </Modal>
           ) ;
         }
+    };
+
+    AnimePageMedia = () => {
+        let {anime, status, progress} = this.state;
+
+        if(AniListAuth.loggedIn && status) {
+            let progressSelections = [];
+
+            for (let i = 1; i <= anime.Media.episodes; i++) {
+                progressSelections.push({label: i + ' / ' + anime.Media.episodes + ' EP', value: i});
+            }
+
+            return (
+                <View style={MainStyles.animeScreenStyles.progress}>
+                    <RNPickerSelect
+                        placeholder={{}}
+                        style={{...MainStyles.pickerSelectStyles, iconContainer: {top: 8, right: 10}}}
+                        value={status}
+                        onValueChange={value => value !== statuses ? AniListAuth.updateStatus(anime.Media.id, value).then(res => this.setState({status: value})) : null}
+                        items={statuses}
+                        Icon={() => <FontAwesome5Icon color='white' name={'sort-down'} size={15}/>}
+                    />
+
+                    <RNPickerSelect
+                        placeholder={{}}
+                        style={{...MainStyles.pickerSelectStyles, iconContainer: {top: 8, right: 10}}}
+                        value={progress}
+                        onValueChange={value => value !== progress ? AniListAuth.updateProgress(anime.Media.id, value).then(res => this.setState({progress: value})) : null}
+                        items={progressSelections}
+                        Icon={() => <FontAwesome5Icon color='white' name={'sort-down'} size={15}/>}
+                    />
+                </View>
+            );
+        }
+
+        return null;
     };
 
     render() {

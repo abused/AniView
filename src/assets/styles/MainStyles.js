@@ -226,11 +226,35 @@ const animeScreenStyles = StyleSheet.create({
         width: '100%'
     },
     bannerImage: {
-        width: '100%',
-        height: Info.WINDOW_HEIGHT * 0.55,
-        marginBottom: 5,
-        borderBottomColor: theme.redColor,
-        borderBottomWidth: 2
+        width: cardWidth,
+        height: cardHeight,
+        borderRadius: 5
+    },
+    infoContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        width: '96%',
+        height: cardHeight,
+        marginTop: 10,
+        marginLeft: '2%',
+        marginBottom: 10
+    },
+    info: {
+        width: (Info.WINDOW_WIDTH * 0.96) - (cardWidth + 20),
+        height: '75%',
+        marginLeft: 10,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+    },
+    animeTitle: {
+        width: (Info.WINDOW_WIDTH * 0.96) - (cardWidth + 20),
+        height: '25%',
+        marginLeft: 10
+    },
+    infoColumn: {
+        flexDirection: 'row',
+        justifyContent: 'space-between'
     },
     genreContainer: {
         width: '100%',
@@ -258,7 +282,8 @@ const animeScreenStyles = StyleSheet.create({
     description: {
         marginTop: 5,
         color: theme.textColor,
-        fontSize: 14
+        fontSize: 16,
+        marginBottom: 10
     },
     episodeCard: {
         width: '100%',
@@ -307,10 +332,47 @@ const animeScreenStyles = StyleSheet.create({
     pageButton: {
         backgroundColor: theme.darkBlueColor,
         width: 'auto'
+    },
+    infoTitle: {
+        color: theme.textColor,
+        textTransform: 'uppercase'
+    },
+    infoText: {
+        color: theme.buttonTextColor
+    },
+    progress: {
+        width: '70%',
+        marginLeft: '15%',
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
     }
 });
 
 const pickerSelectStyles = StyleSheet.create({
+    inputIOS: {
+        fontSize: 16,
+        padding: 8,
+        borderRadius: 4,
+        borderWidth: 2,
+        borderColor: theme.blueColor,
+        color: theme.buttonTextColor,
+        paddingRight: 30,
+        marginBottom: 10
+    },
+    inputAndroid: {
+        fontSize: 16,
+        padding: 8,
+        borderRadius: 4,
+        borderWidth: 2,
+        borderColor: theme.blueColor,
+        color: theme.buttonTextColor,
+        paddingRight: 30,
+        marginBottom: 10
+    }
+});
+
+const pagePickerSelectStyles = StyleSheet.create({
     inputIOS: {
         fontSize: 16,
         padding: 10,
@@ -339,5 +401,6 @@ module.exports = {
     searchStyles,
     settingsStyles,
     animeScreenStyles,
+    pagePickerSelectStyles,
     pickerSelectStyles
 };

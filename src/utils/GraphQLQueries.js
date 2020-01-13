@@ -75,6 +75,15 @@ query($user: Int) {
 }
 `;
 
+const getProgressQuery = `
+query($animeId: Int, $user: Int) {
+    MediaList(userId: $user, mediaId: $animeId) {
+      status
+      progress
+    }
+}
+`;
+
 const getAnimeQuery = `
 query($animeId: Int) {
     Media(id: $animeId) {
@@ -82,6 +91,11 @@ query($animeId: Int) {
         episodes
         description(asHtml: false)
         genres
+        format
+        season
+        seasonYear
+        averageScore
+        status
         title {
             english
             romaji
@@ -130,7 +144,26 @@ query($animeId: Int) {
 }
 `;
 
+const updateStatusQuery = `
+mutation UpdateMedia($listId: Int, $status: MediaListStatus) {
+    SaveMediaListEntry(mediaId: $listId, status: $status) {
+        id
+    }
+}
+`;
+
+const updateProgressQuery = `
+mutation UpdateMedia($listId: Int, $progress: Int) {
+    SaveMediaListEntry(mediaId: $listId, progress: $progress) {
+        id
+    }
+}
+`;
+
 module.exports = {
+  getProgressQuery,
+  updateStatusQuery,
+  updateProgressQuery,
   loginQuery,
   notificationsQuery,
   trendingAnimeQuery,
