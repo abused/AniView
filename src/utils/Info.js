@@ -1,6 +1,7 @@
 import {Dimensions} from 'react-native';
 
 const DISCORD_LINK = 'https://discord.gg/KseTWt5';
+const ISSUES_LINK = 'https://github.com/abused/AniView/issues';
 
 const BACKGROUND = require('./../assets/images/background-light.png');
 const TRANS_LOGO = require('./../assets/images/transparent_logo.png');
@@ -30,9 +31,6 @@ const REMOVE_ADS = `
   for(var i = tags.length; i >= 0; i--) {
     if(tags[i] && tags[i].getAttribute('src') != null && tags[i].getAttribute('src').indexOf('https://www.googletagmanager.com/gtag/js?id=UA-148184993-1') > -1) {
       tags[i].parentNode.removeChild(tags[i]);
-      console.log('script removed!!!');
-      console.log('script removed!!!');
-      console.log('script removed!!!');
     }
   }
 })();
@@ -48,5 +46,6 @@ module.exports = {
   SPLASH,
   DISCORD_LINK,
   ABOUT,
-  REMOVE_ADS
+  REMOVE_ADS,
+  ISSUES_LINK
 };

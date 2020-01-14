@@ -133,7 +133,7 @@ export default class BaseAnimeScreen extends React.Component {
                 <Image source={{uri: image}} style={MainStyles.searchStyles.animeImage} />
                 <View style={MainStyles.searchStyles.animeTitleCard}>
                     <Text numberOfLines={1} style={MainStyles.searchStyles.animeTitle}>{title + '\n'}</Text>
-                    <Text numberOfLines={3} style={MainStyles.searchStyles.animeInfo}>{description}</Text>
+                    <Text numberOfLines={3} style={MainStyles.searchStyles.animeInfo}>{description ? description.replace(/(<([^>]+)>)/ig, '') : ''}</Text>
                 </View>
             </TouchableOpacity>
         );
@@ -378,9 +378,10 @@ export default class BaseAnimeScreen extends React.Component {
 
         if(AniListAuth.loggedIn && status) {
             let progressSelections = [];
+            let episodes = anime.Media.episodes ? anime.Media.episodes : anime.Media.nextAiringEpisode.episode - 1;
 
-            for (let i = 1; i <= anime.Media.episodes; i++) {
-                progressSelections.push({label: i + ' / ' + anime.Media.episodes + ' EP', value: i});
+            for (let i = 0; i <= episodes; i++) {
+                progressSelections.push({label: i + ' / ' + episodes + ' EP', value: i});
             }
 
             return (

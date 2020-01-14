@@ -87,6 +87,10 @@ export default class SettingsScreen extends React.Component {
                         <Text style={MainStyles.settingsStyles.optionText}><FontAwesome5Icon name={'discord'} size={20}/>   Discord</Text>
                     </TouchableOpacity>
 
+                    <TouchableOpacity style={MainStyles.settingsStyles.option} onPress={() => Linking.openURL(Info.ISSUES_LINK)}>
+                        <Text style={MainStyles.settingsStyles.optionText}><FontAwesome5Icon name={'exclamation-circle'} size={20}/>   Issues</Text>
+                    </TouchableOpacity>
+
                     <TouchableOpacity style={MainStyles.settingsStyles.option} onPress={() => this.setState({aboutVisible: true})}>
                         <Text style={MainStyles.settingsStyles.optionText}><FontAwesome5Icon name={'info-circle'} size={20}/>   About</Text>
                     </TouchableOpacity>
