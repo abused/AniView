@@ -168,7 +168,7 @@ const settingsStyles = StyleSheet.create({
     option: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: theme.animeTitleBackgroundColor,
+        backgroundColor: 'rgba(25, 29, 38, 0.4)',
         borderBottomColor: theme.textColor,
         height: 50,
         borderBottomWidth: 1
