@@ -1,3 +1,4 @@
+const special = ['second', 'third', 'fourth', 'fifth', 'sixth'];
 const URL = 'https://www9.gogoanime.io/';
 const searchURL = URL + '/search.html?keyword=';
 const episodeTag = '-episode-';
@@ -37,11 +38,17 @@ async function getAnimePage(title, originalTitle, tries) {
 
         if(link && ~link.toString().indexOf('/anime-list.html')) {
             if (tries === 1) {
-                return getAnimePage(title.replace(' (TV)'), title.replace(' (TV)'), tries += 1);
+                return getAnimePage(title.replace(' (TV)'), title.replace(' (TV)'), tries+1);
             } else if (tries === 2) {
-                return getAnimePage(originalTitle.split('!').join('').split('.').join(''), originalTitle, tries += 1);
-            } else if (tries === 3) {
-                return getAnimePage(originalTitle.split(' ').join(''), originalTitle, tries += 1);
+                return getAnimePage(originalTitle.split(' ').join(''), originalTitle, tries+++1);
+            } if(tries === 3) {
+                let newTitle = originalTitle.replace('2nd', 'second').replace('3rd', 'third').replace('4th', 'fourth').replace('2', 'Second Season').replace('3', 'Third Season').replace('4', 'Fourth Season');
+                return getAnimePage(newTitle, originalTitle, tries+1);
+            } else if (tries === 4) {
+                console.log(originalTitle.replace('!!', '!!:').replace('VS', 'VS.'));
+                return getAnimePage(originalTitle.replace('!!', '!!:').replace('VS', 'VS.'), originalTitle, tries+1);
+            } else if (tries === 5) {
+                return getAnimePage(originalTitle.split('!').join('').split('.').join('').split('-').join('').replace('nanode', 'nano de').replace('VS', 'VS.'), originalTitle, tries+1);
             }
         }
 
