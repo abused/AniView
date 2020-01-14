@@ -5,7 +5,7 @@ const Utils = require('./Utils');
 const KitsuAniUtils = require('./KitsuAniUtils');
 const AnimeUtils = require('./AnimeUtils');
 
-const clientID = 1336;
+const clientID = 2722;
 const authURL = 'https://anilist.co/api/v2/oauth/authorize?client_id=' + clientID + '&response_type=token';
 const graphURL = 'https://graphql.anilist.co/';
 
