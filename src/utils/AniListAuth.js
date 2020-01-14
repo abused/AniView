@@ -1,8 +1,6 @@
-//TODO SWITCH BACK TO ANILIST ONCE THEY MOVE AWAY FROM CRUNCHYROLL!
 import {Alert, Linking} from "react-native";
 import {loginQuery, notificationsQuery, trendingAnimeQuery, watchingAnimeQuery, searchAnimeQuery, getAnimeQuery, updateProgressQuery, updateStatusQuery, getProgressQuery} from './GraphQLQueries';
 const Utils = require('./Utils');
-const KitsuAniUtils = require('./KitsuAniUtils');
 const AnimeUtils = require('./AnimeUtils');
 
 const clientID = 2722;
