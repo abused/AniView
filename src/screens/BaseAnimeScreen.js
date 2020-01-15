@@ -206,6 +206,7 @@ export default class BaseAnimeScreen extends React.Component {
                             if (pageEpisodes[episode]) {
                                 return (
                                     <WebView
+                                        allowsFullscreenVideo={true}
                                         scrollEnabled={false}
                                         source={{uri: pageEpisodes[episode]}}
                                         onShouldStartLoadWithRequest={request => {
