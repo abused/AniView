@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import FontAwesome5Icon from "react-native-vector-icons/FontAwesome5";
 import BaseAnimeScreen from './BaseAnimeScreen';
+import {NavigationEvents} from "react-navigation";
 
 const MainStyles = require('../assets/styles/MainStyles');
 const GlobalStyles = require('../assets/styles/GlobalStyles');
@@ -35,6 +36,7 @@ export default class HomeScreen extends BaseAnimeScreen {
         if(animeLoaded) {
             return(
                 <SafeAreaView style={[GlobalStyles.globalStyles.safeContainer, {backgroundColor: ThemeParser.backgroundColor}]}>
+                    <NavigationEvents onDidFocus={() => this._loadAsync()} />
                     {animeScreenOpen ? this.AnimePageModal() : null}
 
                     <FlatList

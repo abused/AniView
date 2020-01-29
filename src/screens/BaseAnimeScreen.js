@@ -3,7 +3,6 @@ import {
     TouchableOpacity,
     View,
     Text,
-    FlatList,
     ImageBackground,
     Image,
     ScrollView,
@@ -44,7 +43,8 @@ export default class BaseAnimeScreen extends React.Component {
         page: 1,
         search: '',
         status: '',
-        progress: ''
+        progress: '',
+        simpleStyle: false
     };
 
     constructor(props) {
@@ -72,6 +72,10 @@ export default class BaseAnimeScreen extends React.Component {
             await AniListAuth.getWatchingAnime(AniListAuth.userID);
             this.setState({animeLoaded: true});
         }
+
+        Utils.retrieveData('simpleStyle').then(value => {
+            this.setState({simpleStyle: value !== 'false'});
+        });
     };
 
     setRefreshing = (value) => {
@@ -96,12 +100,15 @@ export default class BaseAnimeScreen extends React.Component {
     };
 
     HomeItem = (id, title, image) => {
+        let {simpleStyle} = this.state;
+        let homeStyles = simpleStyle ? MainStyles.simpleHomeStyles : MainStyles.extendedHomeStyles;
+
         return(
-            <ImageBackground source={require('../assets/images/anime_placeholder.png')} style={MainStyles.homeStyles.animeCard}>
-                <TouchableOpacity style={MainStyles.homeStyles.cardContent} onPress={() => this.openAnime(id, title)}>
-                    <Image source={{uri: image}} style={MainStyles.homeStyles.animeImage}/>
-                    <View style={MainStyles.homeStyles.animeTitleCard}>
-                        <Text numberOfLines={2} style={MainStyles.homeStyles.animeTitle}>{title}</Text>
+            <ImageBackground source={require('../assets/images/anime_placeholder.png')} style={homeStyles.animeCard}>
+                <TouchableOpacity style={homeStyles.cardContent} onPress={() => this.openAnime(id, title)}>
+                    <Image source={{uri: image}} style={homeStyles.animeImage}/>
+                    <View style={homeStyles.animeTitleCard}>
+                        <Text style={homeStyles.animeTitle}>{title}</Text>
                     </View>
                 </TouchableOpacity>
             </ImageBackground>

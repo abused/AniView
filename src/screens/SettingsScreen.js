@@ -21,7 +21,8 @@ export default class SettingsScreen extends React.Component {
         refreshing: false,
         aboutVisible: false,
         displayThemes: false,
-        notifications: true
+        notifications: true,
+        simpleStyle: false
     };
 
     constructor(props) {
@@ -33,6 +34,10 @@ export default class SettingsScreen extends React.Component {
         Utils.retrieveData('notifications').then(value => {
             this.setState({notifications: value !== 'false'});
         });
+
+        Utils.retrieveData('simpleStyle').then(value => {
+            this.setState({simpleStyle: value !== 'false'});
+        });
     };
 
     setRefreshing = (value) => {
@@ -41,11 +46,16 @@ export default class SettingsScreen extends React.Component {
 
     setNotifications = () => {
         let {notifications} = this.state;
-        Utils.storeData('notifications', (!notifications).toString()).then(() => this.setState({notifications: !notifications}));
+        Utils.storeData('notifications', (!notifications).toString()).then(() => this.setState({simpleStyle: !notifications}));
+    };
+
+    setStyleSetting = () => {
+        let {simpleStyle} = this.state;
+        Utils.storeData('simpleStyle', (!simpleStyle).toString()).then(() => this.setState({simpleStyle: !simpleStyle}));
     };
 
     render() {
-        let {aboutVisible, displayThemes, notifications} = this.state;
+        let {aboutVisible, notifications, simpleStyle} = this.state;
 
         return(
             <SafeAreaView style={[GlobalStyles.globalStyles.safeContainer, {backgroundColor: ThemeParser.backgroundColor}]}>
@@ -73,10 +83,14 @@ export default class SettingsScreen extends React.Component {
                         <Text style={MainStyles.settingsStyles.specialText}>GENERAL</Text>
                     </View>
 
-
-                    <View style={MainStyles.settingsStyles.option} onPress={() => this.setState({displayThemes: !displayThemes})}>
+                    <View style={MainStyles.settingsStyles.option}>
                         <Text style={MainStyles.settingsStyles.optionText}><FontAwesome5Icon name={'bell'} size={20}/>   Notifications</Text>
                         <Switch style={{position: 'absolute', right: '2.5%'}} onValueChange={this.setNotifications} value={notifications} onTintColor={ThemeParser.blueColor} tintColor={ThemeParser.textColor}/>
+                    </View>
+
+                    <View style={MainStyles.settingsStyles.option}>
+                        <Text style={MainStyles.settingsStyles.optionText}><FontAwesome5Icon name={'paint-brush'} size={20}/>   Simple Anime Card Style</Text>
+                        <Switch style={{position: 'absolute', right: '2.5%'}} onValueChange={this.setStyleSetting} value={simpleStyle} onTintColor={ThemeParser.blueColor} tintColor={ThemeParser.textColor}/>
                     </View>
 
                     <View style={MainStyles.settingsStyles.category}>

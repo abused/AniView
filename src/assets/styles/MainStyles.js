@@ -6,7 +6,7 @@ const theme = require('../../utils/ThemeParser');
 const cardHeight = (Info.WINDOW_HEIGHT - (Constants.statusBarHeight * 5) - 30) / 3;
 const cardWidth = (Info.WINDOW_WIDTH - 30) / 3;
 
-const homeStyles = StyleSheet.create({
+const extendedHomeStyles = StyleSheet.create({
     animeCard: {
         margin: 5,
         width: cardWidth,
@@ -36,6 +36,36 @@ const homeStyles = StyleSheet.create({
         backgroundColor: theme.animeTitleBackgroundColor,
         borderTopColor: theme.textColor,
         borderTopWidth: 2
+    }
+});
+
+const simpleHomeStyles = StyleSheet.create({
+    animeCard: {
+        margin: 5,
+        width: cardWidth,
+        height: cardHeight,
+    },
+    cardContent: {
+        width: '100%',
+        height: '100%',
+        justifyContent: 'flex-end',
+    },
+    animeImage: {
+        width: cardWidth,
+        height: cardHeight
+    },
+    animeTitle: {
+        marginTop: 5,
+        flexWrap: 'wrap',
+        textShadow: '2px 2px 4px #000000',
+        color: 'white',
+        marginLeft: 5
+    },
+    animeTitleCard: {
+        width: cardWidth,
+        height: 'auto',
+        backgroundColor: 'rgba(1, 1, 1, 0.6)',
+        position: 'absolute'
     }
 });
 
@@ -396,7 +426,8 @@ const pagePickerSelectStyles = StyleSheet.create({
 });
 
 module.exports = {
-    homeStyles,
+    extendedHomeStyles,
+    simpleHomeStyles,
     listStyles,
     searchStyles,
     settingsStyles,
