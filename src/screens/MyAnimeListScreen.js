@@ -7,7 +7,7 @@ import {
     FlatList,
     ImageBackground,
     ActivityIndicator,
-    Image,
+    Image
 } from "react-native";
 import {SafeAreaView, NavigationEvents} from 'react-navigation';
 import {Input} from "react-native-elements";
@@ -58,6 +58,7 @@ export default class MyAnimeListScreen extends BaseAnimeScreen {
                                     leftIcon={<FontAwesome color={ThemeParser.blueColor} size={32} name='sign-in' />}
                                     onChangeText={text => this.setState({token: text})}
                                     removeClippedSubviews={false}
+                                    multiline={false}
                                 />
 
                                 <View style={{flex: 1, justifyContent: 'space-around'}}>

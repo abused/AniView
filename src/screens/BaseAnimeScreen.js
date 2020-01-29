@@ -70,12 +70,12 @@ export default class BaseAnimeScreen extends React.Component {
 
         if(AniListAuth.loggedIn) {
             await AniListAuth.getWatchingAnime(AniListAuth.userID);
-            this.setState({animeLoaded: true});
         }
-
         Utils.retrieveData('simpleStyle').then(value => {
-            this.setState({simpleStyle: value !== 'false'});
+            this.setState({simpleStyle: value === 'true'});
         });
+
+        this.setState({animeLoaded: true});
     };
 
     setRefreshing = (value) => {
@@ -108,7 +108,7 @@ export default class BaseAnimeScreen extends React.Component {
                 <TouchableOpacity style={homeStyles.cardContent} onPress={() => this.openAnime(id, title)}>
                     <Image source={{uri: image}} style={homeStyles.animeImage}/>
                     <View style={homeStyles.animeTitleCard}>
-                        <Text style={homeStyles.animeTitle}>{title}</Text>
+                        <Text numberOfLines={simpleStyle ? 6 : 2} style={homeStyles.animeTitle}>{title}</Text>
                     </View>
                 </TouchableOpacity>
             </ImageBackground>
@@ -258,6 +258,7 @@ export default class BaseAnimeScreen extends React.Component {
                                     onValueChange={(value => this.openEpisodePage(value))}
                                     items={pageSelections}
                                     Icon={() => <FontAwesome5Icon color='white' name={'sort-down'} size={25}/>}
+                                    useNativeAndroidPickerStyle={false}
                                 />
 
                                 <Button title='Next' onPress={() => {
@@ -401,6 +402,7 @@ export default class BaseAnimeScreen extends React.Component {
                         onValueChange={value => value !== statuses ? AniListAuth.updateStatus(anime.Media.id, value).then(res => this.setState({status: value})) : null}
                         items={statuses}
                         Icon={() => <FontAwesome5Icon color='white' name={'sort-down'} size={15}/>}
+                        useNativeAndroidPickerStyle={false}
                     />
 
                     <RNPickerSelect
@@ -410,6 +412,7 @@ export default class BaseAnimeScreen extends React.Component {
                         onValueChange={value => value !== progress ? AniListAuth.updateProgress(anime.Media.id, value).then(res => this.setState({progress: value})) : null}
                         items={progressSelections}
                         Icon={() => <FontAwesome5Icon color='white' name={'sort-down'} size={15}/>}
+                        useNativeAndroidPickerStyle={false}
                     />
                 </View>
             );

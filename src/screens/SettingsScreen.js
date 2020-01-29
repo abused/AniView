@@ -36,7 +36,7 @@ export default class SettingsScreen extends React.Component {
         });
 
         Utils.retrieveData('simpleStyle').then(value => {
-            this.setState({simpleStyle: value !== 'false'});
+            this.setState({simpleStyle: value === 'true'});
         });
     };
 

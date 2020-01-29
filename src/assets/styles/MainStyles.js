@@ -56,6 +56,7 @@ const simpleHomeStyles = StyleSheet.create({
     },
     animeTitle: {
         marginTop: 5,
+        marginBottom: 5,
         flexWrap: 'wrap',
         textShadow: '2px 2px 4px #000000',
         color: 'white',
