@@ -202,7 +202,7 @@ export default class BaseAnimeScreen extends React.Component {
                         renderHeader={(item) => {
                             let episode = parseInt(item);
                             return (
-                                <TouchableOpacity style={MainStyles.animeScreenStyles.episodeCard} onPress={() => this.setState({expanded: episode - 1})}>
+                                <TouchableOpacity style={MainStyles.animeScreenStyles.episodeCard} onPress={() => this.setState({expanded: (page > 1 ? episode - ((page-1) * 12) : episode) - 1})}>
                                     <Text style={MainStyles.animeScreenStyles.animeEpisodeNumber}>{'Episode ' + item}</Text>
                                 </TouchableOpacity>
                             );
