@@ -1,4 +1,3 @@
-const special = ['second', 'third', 'fourth', 'fifth', 'sixth'];
 const URL = 'https://www9.gogoanime.io/';
 const searchURL = URL + '/search.html?keyword=';
 const episodeTag = '-episode-';
@@ -45,10 +44,9 @@ async function getAnimePage(title, originalTitle, tries) {
                 let newTitle = originalTitle.replace('2nd', 'second').replace('3rd', 'third').replace('4th', 'fourth').replace('2', 'Second Season').replace('3', 'Third Season').replace('4', 'Fourth Season');
                 return getAnimePage(newTitle, originalTitle, tries+1);
             } else if (tries === 4) {
-                console.log(originalTitle.replace('!!', '!!:').replace('VS', 'VS.'));
                 return getAnimePage(originalTitle.replace('!!', '!!:').replace('VS', 'VS.'), originalTitle, tries+1);
             } else if (tries === 5) {
-                return getAnimePage(originalTitle.split('!').join('').split('.').join('').split('-').join('').replace('nanode', 'nano de').replace('VS', 'VS.'), originalTitle, tries+1);
+                return getAnimePage(originalTitle.split('!').join('').split('.').join('').split('-').join('').replace('nanode', 'nano de').replace('VS', 'VS.').replace('Shoumeishitemita', 'Shoumei shitemita'), originalTitle, tries+1);
             }
         }
 

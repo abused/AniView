@@ -153,7 +153,6 @@ export default class BaseAnimeScreen extends React.Component {
             AniListAuth.fetchQuery(getProgressQuery, null, {animeId: id, user: AniListAuth.loggedIn? AniListAuth.userID: 0}).then(res => res.ok ? AniListAuth.handleResponse(res) : null).then(data => {
                 this.setState({status: data ? data.data.MediaList.status : '', progress: data ? data.data.MediaList.progress : 0})
             });
-
             this.openEpisodePage(1);
         });
     };
